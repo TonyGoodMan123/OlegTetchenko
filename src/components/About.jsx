@@ -4,46 +4,49 @@ import SectionTitle from './ui/SectionTitle';
 import { ShieldCheck, ChevronLeft, ChevronRight, Award } from './ui/icons';
 
 const About = ({ onOpenModal }) => {
+    // Base URL for GitHub Pages
+    const baseUrl = '/OlegTetchenko';
+
     // --- Personal Gallery Data & State ---
     // Updated based on user deletion
     const galleryImages = [
-        "/images/about_gallery_1.jpg",
-        "/images/about_gallery_2.jpg",
-        "/images/about_gallery_3.jpg",
-        "/images/about_gallery_4.jpg",
-        "/images/about_gallery_5.jpg",
-        "/images/about_gallery_6.jpg",
-        "/images/about_gallery_7.jpg",
-        "/images/about_gallery_9.jpg",
-        "/images/about_gallery_10.jpg"
+        `${baseUrl}/images/about_gallery_1.jpg`,
+        `${baseUrl}/images/about_gallery_2.jpg`,
+        `${baseUrl}/images/about_gallery_3.jpg`,
+        `${baseUrl}/images/about_gallery_4.jpg`,
+        `${baseUrl}/images/about_gallery_5.jpg`,
+        `${baseUrl}/images/about_gallery_6.jpg`,
+        `${baseUrl}/images/about_gallery_7.jpg`,
+        `${baseUrl}/images/about_gallery_9.jpg`,
+        `${baseUrl}/images/about_gallery_10.jpg`
     ];
     const [currentIndex, setCurrentIndex] = React.useState(0);
     const [isHoveredPersonal, setIsHoveredPersonal] = React.useState(false);
 
     const certImages = [
-        "/images/cert_1.jpg",
-        "/images/cert_2.jpg",
-        "/images/cert_3.jpg",
-        "/images/cert_4.jpg",
-        "/images/cert_5.jpg",
-        "/images/cert_6.jpg",
-        "/images/cert_7.jpg",
-        "/images/cert_8.jpg",
-        "/images/cert_9.jpg",
-        "/images/cert_10.jpg",
-        "/images/cert_11.jpg",
-        "/images/cert_12.jpg",
-        "/images/cert_13.jpg",
-        "/images/cert_14.jpg",
-        "/images/cert_15.jpg",
-        "/images/cert_16.jpg",
-        "/images/cert_17.jpg",
-        "/images/cert_18.jpg",
-        "/images/cert_19.jpg",
-        "/images/cert_20.jpg",
-        "/images/cert_21.jpg",
-        "/images/cert_22.jpg",
-        "/images/cert_23.jpg"
+        `${baseUrl}/images/cert_1.jpg`,
+        `${baseUrl}/images/cert_2.jpg`,
+        `${baseUrl}/images/cert_3.jpg`,
+        `${baseUrl}/images/cert_4.jpg`,
+        `${baseUrl}/images/cert_5.jpg`,
+        `${baseUrl}/images/cert_6.jpg`,
+        `${baseUrl}/images/cert_7.jpg`,
+        `${baseUrl}/images/cert_8.jpg`,
+        `${baseUrl}/images/cert_9.jpg`,
+        `${baseUrl}/images/cert_10.jpg`,
+        `${baseUrl}/images/cert_11.jpg`,
+        `${baseUrl}/images/cert_12.jpg`,
+        `${baseUrl}/images/cert_13.jpg`,
+        `${baseUrl}/images/cert_14.jpg`,
+        `${baseUrl}/images/cert_15.jpg`,
+        `${baseUrl}/images/cert_16.jpg`,
+        `${baseUrl}/images/cert_17.jpg`,
+        `${baseUrl}/images/cert_18.jpg`,
+        `${baseUrl}/images/cert_19.jpg`,
+        `${baseUrl}/images/cert_20.jpg`,
+        `${baseUrl}/images/cert_21.jpg`,
+        `${baseUrl}/images/cert_22.jpg`,
+        `${baseUrl}/images/cert_23.jpg`
     ];
     const [certIndex, setCertIndex] = React.useState(0);
     const [isHoveredCert, setIsHoveredCert] = React.useState(false);

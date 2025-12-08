@@ -7,8 +7,8 @@ import {
 } from './ui/icons';
 
 const Problems = ({ onOpenModal }) => {
-    // Base URL for GitHub Pages
-    const baseUrl = '/OlegTetchenko';
+    // Dynamically resolve base URL for both dev and prod
+    const baseUrl = import.meta.env.BASE_URL;
 
     const items = [
         {

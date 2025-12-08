@@ -47,7 +47,7 @@ const Hero = ({ onOpenModal }) => (
             <div className="order-1 md:order-2 relative flex justify-center md:block">
                 <div className="relative rounded-[3rem] overflow-hidden shadow-2xl bg-slate-200 aspect-[4/5] md:max-w-md md:mx-auto">
                     <img
-                        src="/OlegTetchenko/images/hero_photo_purple.jpg"
+                        src={`${import.meta.env.BASE_URL}images/hero_photo_purple.jpg`}
                         alt="Олег Тетченко"
                         className="w-full h-full object-cover"
                     />

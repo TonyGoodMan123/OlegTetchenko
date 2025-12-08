@@ -4,8 +4,8 @@ import SectionTitle from './ui/SectionTitle';
 import { ShieldCheck, ChevronLeft, ChevronRight, Award } from './ui/icons';
 
 const About = ({ onOpenModal }) => {
-    // Base URL for GitHub Pages
-    const baseUrl = '/OlegTetchenko';
+    // Dynamically resolve base URL for both dev and prod
+    const baseUrl = import.meta.env.BASE_URL;
 
     // --- Personal Gallery Data & State ---
     // Updated based on user deletion

@@ -35,7 +35,7 @@ const Method = ({ onOpenModal }) => (
 
                 <div className="relative h-full min-h-[300px] md:min-h-0 rounded-2xl overflow-hidden shadow-md">
                     <img
-                        src="/OlegTetchenko/images/method_photo.jpg"
+                        src={`${import.meta.env.BASE_URL}images/method_photo.jpg`}
                         alt="Олег Тетченко - работа с моделью черепа"
                         className="w-full h-full object-cover"
                     />

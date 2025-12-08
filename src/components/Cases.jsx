@@ -105,15 +105,24 @@ const TestimonialsCarousel = () => {
                 >
                     {displayTestimonials.map((r, i) => (
                         <div key={i} className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-3">
-                            <div className="bg-slate-50 rounded-3xl p-6 border border-slate-100 h-full flex flex-col">
-                                <div className="flex text-yellow-400 mb-3">
-                                    {[...Array(5)].map((_, x) => <Star key={x} size={16} fill="currentColor" stroke="none" />)}
+                            <div className="bg-slate-50 rounded-3xl p-6 border border-slate-100 h-full flex flex-col shadow-sm card-hover">
+                                <div className="flex justify-between items-start mb-4 pb-4 border-b border-slate-200/50">
+                                    <span className="font-bold text-slate-800 text-sm md:text-base">{r.name}</span>
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex text-yellow-400">
+                                            {[...Array(5)].map((_, x) => <Star key={x} size={14} fill="currentColor" stroke="none" />)}
+                                        </div>
+                                        <span className="text-xs font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">5.0</span>
+                                    </div>
                                 </div>
-                                <h5 className="font-bold text-slate-800 mb-2">{r.title}</h5>
+
+                                <h5 className="font-bold text-brand-purple mb-2 text-sm md:text-base leading-tight">{r.title}</h5>
                                 <p className="text-slate-600 text-sm leading-relaxed mb-4 flex-grow">"{r.text}"</p>
-                                <div className="flex justify-between items-end pt-4 border-t border-slate-200/50">
-                                    <span className="font-bold text-slate-700 text-xs uppercase tracking-wider">{r.name}</span>
-                                    <a href="https://vk.com/reviews-212898269" target="_blank" className="text-[10px] font-bold text-blue-600 hover:underline">Оригинал в VK</a>
+
+                                <div className="pt-2 mt-auto">
+                                    <a href="https://vk.com/reviews-212898269" target="_blank" className="text-[10px] font-bold text-blue-500 hover:text-blue-600 hover:underline flex items-center opacity-75 hover:opacity-100 transition-opacity">
+                                        Читать оригинал в VK
+                                    </a>
                                 </div>
                             </div>
                         </div>

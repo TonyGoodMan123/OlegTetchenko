@@ -35,7 +35,14 @@ const Header = ({ onOpenModal }) => {
                     <img src={`${import.meta.env.BASE_URL}images/logo.png`} alt="Logo" className="h-8 w-8 md:h-12 md:w-12 object-contain" />
 
                     <h1 className="font-serif font-bold text-slate-800 flex items-center gap-2 text-sm md:text-2xl">
-                        <span className="font-sans font-medium text-slate-500 text-xs md:text-xl">Кинезиолог |</span> Олег Тетченко
+                        <span className="font-sans font-medium text-slate-500 text-xs md:text-xl inline-grid h-[1.2em] overflow-hidden">
+                            <span className="animate-slide-up-words">
+                                <span className="block h-[1.2em]">Кинезиолог |</span>
+                                <span className="block h-[1.2em]">Остеопрактик |</span>
+                                <span className="block h-[1.2em]">Кинезиолог |</span>
+                            </span>
+                        </span>
+                        Олег Тетченко
                     </h1>
                 </div>
 

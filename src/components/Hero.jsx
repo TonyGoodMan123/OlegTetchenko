@@ -53,7 +53,7 @@ const Hero = ({ onOpenModal }) => (
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900/90 to-transparent p-6 md:p-8 pt-24">
                         <h3 className="text-white font-serif text-2xl md:text-3xl font-bold leading-tight mb-1">Олег Тетченко</h3>
-                        <p className="text-slate-200 text-sm md:text-base font-medium opacity-90">Кинезиолог в г.Ноябрьск</p>
+                        <p className="text-slate-200 text-sm md:text-base font-medium opacity-90">Кинезиолог · Остеопрактик в г.Ноябрьск</p>
                         <div className="flex items-center gap-2 mt-3">
                             <span className="text-white text-xs md:text-sm font-medium">Отзывы:</span>
                             <div className="flex text-yellow-400">

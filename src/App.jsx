@@ -9,6 +9,7 @@ import Cases from './components/Cases';
 import About from './components/About';
 import Contacts from './components/Contacts';
 import Footer from './components/Footer';
+import MobileStickyCTA from './components/MobileStickyCTA';
 import Modal from './components/Modal';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Contacts onOpenModal={() => setIsModalOpen(true)} />
       </main>
 
+      <MobileStickyCTA onOpenModal={() => setIsModalOpen(true)} />
       <Footer />
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

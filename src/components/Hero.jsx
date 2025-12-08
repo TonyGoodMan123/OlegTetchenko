@@ -37,7 +37,7 @@ const Hero = ({ onOpenModal }) => (
 
                 <div className="flex flex-col sm:flex-row gap-4">
                     <div className="flex flex-col">
-                        <Button onClick={onOpenModal} className="text-lg px-8 py-4 shadow-brand-purple/30">
+                        <Button id="hero-cta-button" onClick={onOpenModal} className="text-lg px-8 py-4 shadow-brand-purple/30">
                             Получить бесплатную консультацию
                         </Button>
                     </div>

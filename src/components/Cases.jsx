@@ -156,14 +156,23 @@ const TestimonialsCarousel = () => {
 };
 
 
-const Cases = ({ onOpenModal }) => (
-    <Section id="cases" bg="white">
-        <SectionTitle
-            title="Кейсы и отзывы"
-            subtitle="Реальные истории пациентов. Что было до, что делали и каких результатов удалось добиться."
-        />
+const Cases = ({ onOpenModal }) => {
+    // --- Cases Carousel State ---
+    const [currentCaseIndex, setCurrentCaseIndex] = React.useState(0);
+    const [isHoveredCases, setIsHoveredCases] = React.useState(false);
+    const totalCases = 3;
 
-        {/* <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+    const nextCase = () => setCurrentCaseIndex((prev) => (prev + 1) % totalCases);
+    const prevCase = () => setCurrentCaseIndex((prev) => (prev - 1 + totalCases) % totalCases);
+
+    return (
+        <Section id="cases" bg="white">
+            <SectionTitle
+                title="Кейсы и отзывы"
+                subtitle="Реальные истории пациентов. Что было до, что делали и каких результатов удалось добиться."
+            />
+
+            {/* <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {[
                 {
                     label: "Кейс: плечевой сустав",
@@ -223,112 +232,143 @@ const Cases = ({ onOpenModal }) => (
             ))}
         </div> */}
 
-        <div className="mb-16">
-            <h3 className="text-2xl font-serif font-bold text-slate-800 mb-2">Видео-кейсы и до/после</h3>
-            <p className="text-slate-500 mb-8">Видео и фото, показывающие реальные изменения после работы.</p>
+            <div className="mb-16 group relative" onMouseEnter={() => setIsHoveredCases(true)} onMouseLeave={() => setIsHoveredCases(false)}>
+                <h3 className="text-2xl font-serif font-bold text-slate-800 mb-2">Кейсы обращений (До/После)</h3>
+                <p className="text-slate-500 mb-8">Видео и фото, показывающие реальные изменения после работы.</p>
 
-            <div className="grid md:grid-cols-3 gap-6">
-                <div className="group cursor-pointer md:col-span-1" onClick={() => window.open('https://vkvideo.ru/video-212898269_456239036', '_blank')}>
-                    <div className="bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-all h-full flex flex-col">
-                        {/* Images Container */}
-                        <div className="relative h-48 flex">
-                            <div className="w-1/2 h-full relative">
-                                <img src={caseMarinaBefore} alt="До лечения" className="w-full h-full object-cover object-top" />
-                                <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ДО</div>
-                            </div>
-                            <div className="w-1/2 h-full relative border-l border-white/20 bg-slate-900 group-hover:bg-slate-800 transition-colors">
-                                <img src={caseMarinaAfterPreview} alt="Видео отзыв" className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity" />
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
-                                        <Play size={16} className="text-white ml-1" fill="white" />
+                <div className="overflow-hidden -mx-4 px-4 md:overflow-visible md:px-0">
+                    <div
+                        className="flex transition-transform duration-500 ease-in-out md:transform-none"
+                        style={{ transform: `translateX(calc(-100% * ${currentCaseIndex}))` }}
+                    >
+                        {/* Case 1: Marina */}
+                        <div className="w-full md:w-1/3 flex-shrink-0 pr-4 md:pr-0 md:px-3">
+                            <div className="group cursor-pointer h-full" onClick={() => window.open('https://vkvideo.ru/video-212898269_456239036', '_blank')}>
+                                <div className="bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-all h-full flex flex-col">
+                                    <div className="relative h-48 flex">
+                                        <div className="w-1/2 h-full relative">
+                                            <img src={caseMarinaBefore} alt="До лечения" className="w-full h-full object-cover object-top" />
+                                            <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ДО</div>
+                                        </div>
+                                        <div className="w-1/2 h-full relative border-l border-white/20 bg-slate-900 group-hover:bg-slate-800 transition-colors">
+                                            <img src={caseMarinaAfterPreview} alt="Видео отзыв" className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity" />
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
+                                                    <Play size={16} className="text-white ml-1" fill="white" />
+                                                </div>
+                                            </div>
+                                            <div className="absolute top-2 right-2 bg-teal-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ПОСЛЕ</div>
+                                        </div>
+                                    </div>
+                                    <div className="p-5 flex flex-col flex-grow">
+                                        <div className="mb-3">
+                                            <h4 className="font-bold text-slate-800 text-lg leading-tight">Марина, 35 лет</h4>
+                                            <p className="text-brand-purple text-xs font-bold uppercase tracking-wide mt-1">Боль в спине от кишечника</p>
+                                        </div>
+                                        <div className="space-y-3 text-xs text-slate-600 mb-4 flex-grow">
+                                            <p><strong className="text-slate-700">Проблема:</strong> 5 лечебных блокад не помогли. Боль мешала сидеть и есть.</p>
+                                            <p><strong className="text-slate-700">Диагностика:</strong> Воспаление в кишечнике отключило мышцы пресса → перегруз поясницы.</p>
+                                            <p><strong className="text-slate-700">Решение:</strong> Висцеральная терапия. Боль ушла за 1 сеанс.</p>
+                                        </div>
+                                        <div className="pt-3 border-t border-slate-100 mt-auto flex justify-between items-center">
+                                            <span className="text-[10px] text-slate-400 font-medium">Лечим причину, а не симптом</span>
+                                            <ArrowRightIcon size={12} className="text-brand-purple" />
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="absolute top-2 right-2 bg-teal-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ПОСЛЕ</div>
                             </div>
                         </div>
 
-                        {/* Content */}
-                        <div className="p-5 flex flex-col flex-grow">
-                            <div className="mb-3">
-                                <h4 className="font-bold text-slate-800 text-lg leading-tight">Марина, 35 лет</h4>
-                                <p className="text-brand-purple text-xs font-bold uppercase tracking-wide mt-1">Боль в спине от кишечника</p>
-                            </div>
-
-                            <div className="space-y-3 text-xs text-slate-600 mb-4 flex-grow">
-                                <p><strong className="text-slate-700">Проблема:</strong> 5 лечебных блокад не помогли. Боль мешала сидеть и есть.</p>
-                                <p><strong className="text-slate-700">Диагностика:</strong> Воспаление в кишечнике отключило мышцы пресса → перегруз поясницы.</p>
-                                <p><strong className="text-slate-700">Решение:</strong> Висцеральная терапия. Боль ушла за 1 сеанс.</p>
-                            </div>
-
-                            <div className="pt-3 border-t border-slate-100 mt-auto flex justify-between items-center">
-                                <span className="text-[10px] text-slate-400 font-medium">Лечим причину, а не симптом</span>
-                                <ArrowRightIcon size={12} className="text-brand-purple" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="group cursor-pointer" onClick={() => window.open('https://vk.com/kineziolog_89', '_blank')}>
-                    <div className="relative rounded-2xl overflow-hidden aspect-video bg-slate-900">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
-                        <div className="absolute inset-0 flex items-center justify-center z-20 group-hover:scale-110 transition-transform duration-300">
-                            <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
-                                <Play size={24} className="text-white ml-1" fill="white" />
-                            </div>
-                        </div>
-                        <span className="absolute bottom-4 left-4 text-white font-bold text-sm z-20">Видео-кейс: Работа с осанкой</span>
-                    </div>
-                    <a href="https://vk.com/kineziolog_89" target="_blank" className="inline-flex items-center text-xs font-bold text-blue-600 mt-3 hover:underline">
-                        Смотреть во ВКонтакте <ArrowRightIcon size={12} className="ml-1" />
-                    </a>
-                </div>
-
-                <div className="group cursor-pointer md:col-span-1" onClick={() => window.open('https://vk.com/kineziolog_89', '_blank')}>
-                    <div className="bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-all h-full flex flex-col">
-                        {/* Images Container */}
-                        <div className="relative h-48 flex">
-                            <div className="w-1/2 h-full relative">
-                                <img src={caseDenisBefore} alt="До лечения" className="w-full h-full object-cover" />
-                                <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ДО</div>
-                            </div>
-                            <div className="w-1/2 h-full relative border-l border-white/20">
-                                <img src={caseDenisAfter} alt="После лечения" className="w-full h-full object-cover" />
-                                <div className="absolute top-2 right-2 bg-teal-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ПОСЛЕ</div>
-                            </div>
-                            {/* Overlay on hover */}
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors z-10 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                                <div className="bg-white/90 backdrop-blur text-slate-900 text-xs font-bold px-3 py-2 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
-                                    Подробнее VK
+                        {/* Case 2: Generic Video */}
+                        <div className="w-full md:w-1/3 flex-shrink-0 pr-4 md:pr-0 md:px-3">
+                            <div className="group cursor-pointer h-full flex flex-col" onClick={() => window.open('https://vk.com/kineziolog_89', '_blank')}>
+                                <div className="relative rounded-2xl overflow-hidden aspect-video bg-slate-900 flex-shrink-0">
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+                                    <div className="absolute inset-0 flex items-center justify-center z-20 group-hover:scale-110 transition-transform duration-300">
+                                        <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                                            <Play size={24} className="text-white ml-1" fill="white" />
+                                        </div>
+                                    </div>
+                                    <span className="absolute bottom-4 left-4 text-white font-bold text-sm z-20">Видео-кейс: Работа с осанкой</span>
+                                </div>
+                                <div className="flex-grow flex items-end">
+                                    <a href="https://vk.com/kineziolog_89" target="_blank" className="inline-flex items-center text-xs font-bold text-blue-600 mt-3 hover:underline">
+                                        Смотреть во ВКонтакте <ArrowRightIcon size={12} className="ml-1" />
+                                    </a>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Content */}
-                        <div className="p-5 flex flex-col flex-grow">
-                            <div className="mb-3">
-                                <h4 className="font-bold text-slate-800 text-lg leading-tight">Денис, 24 года</h4>
-                                <p className="text-brand-purple text-xs font-bold uppercase tracking-wide mt-1">Коррекция перекоса за 1 сеанс</p>
-                            </div>
-
-                            <div className="space-y-3 text-xs text-slate-600 mb-4 flex-grow">
-                                <p><strong className="text-slate-700">Проблема:</strong> Тело «ушло» влево. Компенсаторная цепь: укорочение мышц поясницы, скрученный таз, дисбаланс шеи.</p>
-                                <p><strong className="text-slate-700">Решение:</strong> Нашли первопричину. Убрали гипертонус — тело само вернулось в симметрию.</p>
-                            </div>
-
-                            <div className="pt-3 border-t border-slate-100 mt-auto">
-                                <span className="text-[10px] text-slate-400 font-medium">Системный подход кинезиологии</span>
+                        {/* Case 3: Denis */}
+                        <div className="w-full md:w-1/3 flex-shrink-0 pr-4 md:pr-0 md:px-3">
+                            <div className="group cursor-pointer h-full" onClick={() => window.open('https://vk.com/kineziolog_89', '_blank')}>
+                                <div className="bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-all h-full flex flex-col">
+                                    <div className="relative h-48 flex">
+                                        <div className="w-1/2 h-full relative">
+                                            <img src={caseDenisBefore} alt="До лечения" className="w-full h-full object-cover" />
+                                            <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ДО</div>
+                                        </div>
+                                        <div className="w-1/2 h-full relative border-l border-white/20">
+                                            <img src={caseDenisAfter} alt="После лечения" className="w-full h-full object-cover" />
+                                            <div className="absolute top-2 right-2 bg-teal-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ПОСЛЕ</div>
+                                        </div>
+                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors z-10 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                            <div className="bg-white/90 backdrop-blur text-slate-900 text-xs font-bold px-3 py-2 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
+                                                Подробнее VK
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="p-5 flex flex-col flex-grow">
+                                        <div className="mb-3">
+                                            <h4 className="font-bold text-slate-800 text-lg leading-tight">Денис, 24 года</h4>
+                                            <p className="text-brand-purple text-xs font-bold uppercase tracking-wide mt-1">Коррекция перекоса за 1 сеанс</p>
+                                        </div>
+                                        <div className="space-y-3 text-xs text-slate-600 mb-4 flex-grow">
+                                            <p><strong className="text-slate-700">Проблема:</strong> Тело «ушло» влево. Компенсаторная цепь: укорочение мышц поясницы, скрученный таз, дисбаланс шеи.</p>
+                                            <p><strong className="text-slate-700">Решение:</strong> Нашли первопричину. Убрали гипертонус — тело само вернулось в симметрию.</p>
+                                        </div>
+                                        <div className="pt-3 border-t border-slate-100 mt-auto">
+                                            <span className="text-[10px] text-slate-400 font-medium">Системный подход кинезиологии</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div className="mb-16">
-            <h3 className="text-2xl font-serif font-bold text-slate-800 mb-8">Отзывы пациентов</h3>
-            <TestimonialsCarousel />
-        </div>
-    </Section>
-);
+                {/* Mobile Navigation Buttons */}
+                <div className="flex md:hidden justify-between items-center mt-4 px-4">
+                    <button
+                        onClick={prevCase}
+                        className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
+                    >
+                        <ChevronLeft size={24} />
+                    </button>
+                    <div className="flex gap-2">
+                        {[0, 1, 2].map((i) => (
+                            <div
+                                key={i}
+                                className={`h-1.5 rounded-full transition-all ${i === currentCaseIndex ? 'w-6 bg-brand-purple' : 'w-1.5 bg-slate-200'}`}
+                            />
+                        ))}
+                    </div>
+                    <button
+                        onClick={nextCase}
+                        className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
+                    >
+                        <ChevronRight size={24} />
+                    </button>
+                </div>
+            </div>
+
+            <div className="mb-16">
+                <h3 className="text-2xl font-serif font-bold text-slate-800 mb-8">Отзывы пациентов</h3>
+                <TestimonialsCarousel />
+            </div>
+        </Section>
+    );
+
+};
 
 export default Cases;

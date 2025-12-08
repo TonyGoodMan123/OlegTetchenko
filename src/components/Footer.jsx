@@ -10,6 +10,13 @@ const Footer = () => (
                 <a href="#" className="hover:text-white transition">Договор оферты</a>
             </div>
             <p className="opacity-50">© {new Date().getFullYear()} Олег Тетченко. Все права защищены.</p>
+
+            <div className="mt-8 pt-4 border-t border-slate-800/50">
+                <a href="https://t.me/ant2424" target="_blank" rel="noopener noreferrer" className="inline-block text-xs text-slate-600 hover:text-slate-400 transition-colors">
+                    <p>Разработка сайтов и приложений</p>
+                    <p className="font-bold mt-0.5">Антон Федотов</p>
+                </a>
+            </div>
         </div>
     </footer>
 );

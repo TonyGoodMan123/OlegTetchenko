@@ -45,23 +45,54 @@ const Contacts = ({ onOpenModal }) => (
                     </div>
                 </div>
 
-                <div className="flex gap-4">
-                    <a href="https://vk.com/kineziolog_89" target="_blank" className="text-slate-400 hover:text-blue-500 transition"><MessageCircle /></a>
-                    <a href="https://t.me/kinezio_cente" target="_blank" className="text-slate-400 hover:text-blue-400 transition"><Send /></a>
+                <button
+                    onClick={onOpenModal}
+                    className="w-full py-4 bg-gradient-to-r from-brand-purple to-brand-teal text-white font-bold rounded-xl shadow-lg transform active:scale-95 transition-all hover:shadow-xl md:hidden"
+                >
+                    Получить бесплатную консультацию
+                </button>
+            </div>
+
+
+            <div className="flex flex-col gap-8">
+                <div className="rounded-[2rem] overflow-hidden shadow-lg h-96 relative bg-slate-200 flex-shrink-0">
+                    {/* Map Placeholder */}
+                    <iframe
+                        src="https://yandex.ru/map-widget/v1/?ll=75.450570%2C63.208419&z=16&pt=75.450570,63.208419,pm2rdm"
+                        width="100%"
+                        height="100%"
+                        frameBorder="0"
+                        className="absolute inset-0"
+                    ></iframe>
+                </div>
+
+                <div>
+                    <h5 className="font-bold text-slate-800 mb-4">Делюсь полезными советами в соцсетях, подписывайтесь:</h5>
+                    <div className="space-y-3">
+                        <a href="https://vk.com/kineziolog_89" target="_blank" rel="noopener noreferrer" className="flex items-center p-4 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-md transition-all group">
+                            <div className="w-12 h-12 rounded-full bg-[#0077FF] text-white flex items-center justify-center mr-4 flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm">
+                                <MessageCircle size={24} />
+                            </div>
+                            <div>
+                                <h6 className="font-bold text-slate-800 group-hover:text-[#0077FF] transition-colors">Группа ВКонтакте</h6>
+                                <p className="text-xs text-slate-600 leading-tight mt-0.5">В группе выкладываю полезные видео о поддержании здоровья тела</p>
+                            </div>
+                        </a>
+
+                        <a href="https://t.me/kinezio_cente" target="_blank" rel="noopener noreferrer" className="flex items-center p-4 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-md transition-all group">
+                            <div className="w-12 h-12 rounded-full bg-[#24A1DE] text-white flex items-center justify-center mr-4 flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm">
+                                <Send size={24} className="ml-0.5" />
+                            </div>
+                            <div>
+                                <h6 className="font-bold text-slate-800 group-hover:text-[#24A1DE] transition-colors">Телеграм-канал</h6>
+                                <p className="text-xs text-slate-600 leading-tight mt-0.5">Делюсь полезными советами по здоровью в своём телеграм-канале</p>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div className="rounded-[2rem] overflow-hidden shadow-lg h-96 md:h-auto relative bg-slate-200">
-                {/* Map Placeholder */}
-                <iframe
-                    src="https://yandex.ru/map-widget/v1/?ll=75.450570%2C63.208419&z=16&pt=75.450570,63.208419,pm2rdm"
-                    width="100%"
-                    height="100%"
-                    frameBorder="0"
-                    className="absolute inset-0"
-                ></iframe>
-            </div>
         </div>
-    </Section>
+    </Section >
 );
 
 export default Contacts;

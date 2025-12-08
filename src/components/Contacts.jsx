@@ -47,7 +47,7 @@ const Contacts = ({ onOpenModal }) => (
 
                 <button
                     onClick={onOpenModal}
-                    className="w-full py-4 bg-gradient-to-r from-brand-purple to-brand-teal text-white font-bold rounded-xl shadow-lg transform active:scale-95 transition-all hover:shadow-xl md:hidden"
+                    className="w-full py-4 bg-gradient-to-r from-brand-purple to-brand-teal text-white font-bold rounded-full shadow-lg transform active:scale-95 transition-all hover:shadow-xl md:hidden"
                 >
                     Получить бесплатную консультацию
                 </button>

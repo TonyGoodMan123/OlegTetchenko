@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X } from './ui/icons';
 import Button from './ui/Button';
+import { sendTelegramMessage } from '../utils/telegram';
 
 const Modal = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({ name: '', phone: '', desc: '' });
@@ -11,13 +12,32 @@ const Modal = ({ isOpen, onClose }) => {
         return () => { document.body.style.overflow = 'unset'; }
     }, [isOpen]);
 
-    const handleSubmit = (e) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setTimeout(() => {
-            alert(`Спасибо, ${formData.name}! Заявка отправлена. Я свяжусь с вами по номеру ${formData.phone} в ближайшее время.`);
-            setFormData({ name: '', phone: '', desc: '' });
-            onClose();
-        }, 500);
+        setIsSubmitting(true);
+
+        // Импортируем функцию отправки (lazy import or direct if moved up)
+        // Since we are inside the component, let's assume direct import at top
+        // But for cleaner replace, we'll import at top of file in next step if generic
+        // Here we just use the imported function
+
+        try {
+            const result = await sendTelegramMessage(formData);
+
+            if (result.success) {
+                alert(`Спасибо, ${formData.name}! Заявка отправлена. Я свяжусь с вами по номеру ${formData.phone} в ближайшее время.`);
+                setFormData({ name: '', phone: '', desc: '' });
+                onClose();
+            } else {
+                alert('Ошибка отправки: ' + (result.error || 'Проверьте токен'));
+            }
+        } catch (err) {
+            alert('Произошла ошибка при отправке.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     if (!isOpen) return null;

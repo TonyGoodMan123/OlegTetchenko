@@ -6,8 +6,8 @@ const Footer = () => (
             <p className="text-white font-serif font-bold text-lg mb-4">Олег Тетченко</p>
             <p className="mb-8">Кинезиология и остеопрактика. Комплексный подход к здоровью.</p>
             <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 mb-8">
-                <a href="#" className="hover:text-white transition">Политика конфиденциальности</a>
-                <a href="#" className="hover:text-white transition">Договор оферты</a>
+                <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Политика конфиденциальности</a>
+                <a href="/consent.html" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Согласие на обработку ПД</a>
             </div>
             <p className="opacity-50">© {new Date().getFullYear()} Олег Тетченко. Все права защищены.</p>
 

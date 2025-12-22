@@ -50,6 +50,9 @@ const Hero = ({ onOpenModal }) => (
                         src={`${import.meta.env.BASE_URL}images/hero_photo_purple.jpg`}
                         alt="Олег Тетченко"
                         className="w-full h-full object-cover"
+                        loading="eager"
+                        fetchPriority="high"
+                        decoding="async"
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900/90 to-transparent p-6 md:p-8 pt-24">
                         <h3 className="text-white font-serif text-2xl md:text-3xl font-bold leading-tight mb-1">Олег Тетченко</h3>

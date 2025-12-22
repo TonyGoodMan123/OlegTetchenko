@@ -32,7 +32,7 @@ const Header = ({ onOpenModal }) => {
             <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
                 <div className="flex items-center cursor-pointer gap-2 md:gap-4" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                     {/* Logo - visible on all devices */}
-                    <img src={`${import.meta.env.BASE_URL}images/logo.png`} alt="Logo" className="h-8 w-8 md:h-12 md:w-12 object-contain" />
+                    <img src="/images/logo.png" alt="Logo" className="h-8 w-8 md:h-12 md:w-12 object-contain" />
 
                     <h1 className="font-serif font-bold text-slate-800 flex items-center gap-2 text-base md:text-2xl">
                         Олег Тетченко

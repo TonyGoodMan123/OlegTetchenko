@@ -4,7 +4,8 @@ import Button from './ui/Button';
 import { sendTelegramMessage } from '../utils/telegram';
 
 const Modal = ({ isOpen, onClose }) => {
-    const [formData, setFormData] = useState({ name: '', phone: '', desc: '' });
+    const [formData, setFormData] = useState({ name: '', phone: '' });
+    const [consent, setConsent] = useState(false);
 
     useEffect(() => {
         if (isOpen) document.body.style.overflow = 'hidden';
@@ -16,22 +17,24 @@ const Modal = ({ isOpen, onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
 
-        // Импортируем функцию отправки (lazy import or direct if moved up)
-        // Since we are inside the component, let's assume direct import at top
-        // But for cleaner replace, we'll import at top of file in next step if generic
-        // Here we just use the imported function
+        if (!consent) {
+            alert('Пожалуйста, подтвердите согласие на обработку персональных данных.');
+            return;
+        }
+
+        setIsSubmitting(true);
 
         try {
             const result = await sendTelegramMessage(formData);
 
             if (result.success) {
                 alert(`Спасибо, ${formData.name}! Заявка отправлена. Я свяжусь с вами по номеру ${formData.phone} в ближайшее время.`);
-                setFormData({ name: '', phone: '', desc: '' });
+                setFormData({ name: '', phone: '' });
+                setConsent(false);
                 onClose();
             } else {
-                alert('Ошибка отправки: ' + (result.error || 'Проверьте токен'));
+                alert('Ошибка отправки: ' + (result.error || 'Проверьте соединение'));
             }
         } catch (err) {
             alert('Произошла ошибка при отправке.');
@@ -82,24 +85,36 @@ const Modal = ({ isOpen, onClose }) => {
                             onChange={e => setFormData({ ...formData, phone: e.target.value })}
                         />
                     </div>
-                    <div>
-                        <label htmlFor="desc" className="block text-sm font-medium text-slate-700 mb-1">Что беспокоит? (необязательно)</label>
-                        <textarea
-                            id="desc"
-                            className="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-200 focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/20 outline-none transition resize-none h-24"
-                            placeholder="Коротко опишите проблему..."
-                            value={formData.desc}
-                            onChange={e => setFormData({ ...formData, desc: e.target.value })}
+
+                    {/* Consent Checkbox */}
+                    <div className="flex items-start gap-3 pt-2">
+                        <input
+                            id="consent"
+                            type="checkbox"
+                            checked={consent}
+                            onChange={e => setConsent(e.target.checked)}
+                            className="mt-1 w-5 h-5 rounded border-slate-300 text-brand-purple focus:ring-brand-purple/20 cursor-pointer"
+                            required
                         />
+                        <label htmlFor="consent" className="text-sm text-slate-600 leading-relaxed cursor-pointer">
+                            Согласен(на) на{' '}
+                            <a href="/consent.html" target="_blank" rel="noopener noreferrer" className="text-brand-purple hover:underline">
+                                обработку персональных данных
+                            </a>{' '}
+                            и ознакомлен(а) с{' '}
+                            <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="text-brand-purple hover:underline">
+                                Политикой конфиденциальности
+                            </a>
+                        </label>
                     </div>
 
-                    <Button className="w-full text-lg shadow-xl" variant="primary">
-                        Отправить заявку
+                    <Button
+                        className="w-full text-lg shadow-xl"
+                        variant="primary"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Отправка...' : 'Отправить заявку'}
                     </Button>
-
-                    <p className="text-xs text-slate-400 text-center mt-4">
-                        Нажимая кнопку, вы соглашаетесь с обработкой персональных данных.
-                    </p>
                 </form>
             </div>
         </div>
@@ -107,3 +122,4 @@ const Modal = ({ isOpen, onClose }) => {
 };
 
 export default Modal;
+

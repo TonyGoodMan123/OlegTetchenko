@@ -15,22 +15,33 @@ import Modal from './components/Modal';
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleOpenModal = () => {
+    try {
+      if (typeof window.ym === 'function') {
+        window.ym(106065947, 'reachGoal', 'consult_open');
+      }
+    } catch (e) {
+      console.warn('Metrika goal tracking failed', e);
+    }
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="font-sans text-slate-800 antialiased pb-20 md:pb-0">
-      <Header onOpenModal={() => setIsModalOpen(true)} />
+      <Header onOpenModal={handleOpenModal} />
 
       <main>
-        <Hero onOpenModal={() => setIsModalOpen(true)} />
-        <Problems onOpenModal={() => setIsModalOpen(true)} />
-        <Method onOpenModal={() => setIsModalOpen(true)} />
-        <Steps onOpenModal={() => setIsModalOpen(true)} />
+        <Hero onOpenModal={handleOpenModal} />
+        <Problems onOpenModal={handleOpenModal} />
+        <Method onOpenModal={handleOpenModal} />
+        <Steps onOpenModal={handleOpenModal} />
         <Doubts />
-        <Cases onOpenModal={() => setIsModalOpen(true)} />
-        <About onOpenModal={() => setIsModalOpen(true)} />
-        <Contacts onOpenModal={() => setIsModalOpen(true)} />
+        <Cases onOpenModal={handleOpenModal} />
+        <About onOpenModal={handleOpenModal} />
+        <Contacts onOpenModal={handleOpenModal} />
       </main>
 
-      <MobileStickyCTA onOpenModal={() => setIsModalOpen(true)} />
+      <MobileStickyCTA onOpenModal={handleOpenModal} />
       <Footer />
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

@@ -21,11 +21,7 @@ const Modal = ({ isOpen, onClose }) => {
     }, [isOpen]);
 
     const handlePhoneChange = (e) => {
-        let value = e.target.value;
-        if (!value.startsWith('+7')) {
-            value = '+7 ' + value.replace(/^\+?7?\s?/, '');
-        }
-        setFormData({ ...formData, phone: value });
+        setFormData({ ...formData, phone: e.target.value });
     };
 
     const handleSubmit = async (e) => {

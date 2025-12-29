@@ -69,7 +69,7 @@ const Contacts = ({ onOpenModal }) => (
                 <div>
                     <h5 className="font-bold text-slate-800 mb-4">Делюсь полезными советами в соцсетях, подписывайтесь:</h5>
                     <div className="space-y-3">
-                        <a href="https://vk.com/kineziolog_89" target="_blank" rel="noopener noreferrer" className="flex items-center p-4 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-md transition-all group">
+                        <a href="https://vk.com/kineziolog89" target="_blank" rel="noopener noreferrer" className="flex items-center p-4 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-md transition-all group">
                             <div className="w-12 h-12 rounded-full bg-[#0077FF] text-white flex items-center justify-center mr-4 flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm">
                                 <MessageCircle size={24} />
                             </div>

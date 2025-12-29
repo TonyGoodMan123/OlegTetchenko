@@ -47,7 +47,7 @@ const Header = ({ onOpenModal }) => {
                     </h1>
                 </div>
 
-                <div className="hidden xl:flex items-center space-x-6">
+                <div className="hidden lg:flex items-center space-x-6">
                     <nav className="flex space-x-5">
                         {navItems.map(item => (
                             <button key={item.name} onClick={() => scrollTo(item.id)} className="text-sm font-medium text-slate-600 hover:text-brand-purple transition">
@@ -61,13 +61,13 @@ const Header = ({ onOpenModal }) => {
                     </Button>
                 </div>
 
-                <button className="xl:hidden p-2 text-slate-800" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                <button className="lg:hidden p-2 text-slate-800" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     {isMenuOpen ? <X /> : <Menu />}
                 </button>
             </div>
 
             {isMenuOpen && (
-                <div className="absolute top-full left-0 right-0 bg-white shadow-xl border-t border-slate-100 p-6 flex flex-col space-y-4 xl:hidden animate-fade-in max-h-[80vh] overflow-y-auto">
+                <div className="absolute top-full left-0 right-0 bg-white shadow-xl border-t border-slate-100 p-6 flex flex-col space-y-4 lg:hidden animate-fade-in max-h-[80vh] overflow-y-auto">
                     {navItems.map(item => (
                         <button key={item.name} onClick={() => scrollTo(item.id)} className="text-left text-lg font-medium text-slate-700 py-2 border-b border-slate-50">
                             {item.name}

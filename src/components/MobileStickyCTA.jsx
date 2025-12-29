@@ -38,7 +38,7 @@ const MobileStickyCTA = ({ onOpenModal }) => {
     if (!isVisible) return null;
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden animate-slide-up">
+        <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden animate-slide-up">
             <div className="bg-white/90 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] py-4 px-5 safe-area-bottom">
                 <div className="flex items-center justify-between gap-4">
                     <p className="text-xs font-light text-slate-500 leading-tight max-w-[55%]">

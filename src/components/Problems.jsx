@@ -74,7 +74,7 @@ const Problems = ({ onOpenModal }) => {
     ];
 
     return (
-        <section id="problems" className="py-16 md:py-24 px-4 md:px-8 relative overflow-hidden bg-white">
+        <section id="problems" className="py-16 md:py-24 px-4 md:px-8 relative overflow-hidden bg-white scroll-mt-20">
             {/* Hero-like Background with Energy Waves - Full Flex/Responsive */}
             <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-brand-purple/5 via-transparent to-brand-teal/5 -z-10 pointer-events-none"></div>
             <div className="absolute top-0 right-0 w-2/3 h-2/3 bg-gradient-to-bl from-brand-purple/5 to-transparent -z-10 rounded-bl-[100px] pointer-events-none opacity-60"></div>

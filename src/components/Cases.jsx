@@ -138,35 +138,54 @@ const TestimonialsCarousel = () => {
                 </div>
             </div>
 
-            {/* Navigation Buttons */}
-            <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between pointer-events-none">
+            {/* Navigation Buttons - Desktop only */}
+            <div className="hidden md:flex absolute inset-y-0 left-0 right-0 items-center justify-between pointer-events-none">
                 <button
                     onClick={prevTestimonial}
-                    className="pointer-events-auto -ml-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all transform hover:scale-110 opacity-0 group-hover:opacity-100"
+                    className="pointer-events-auto -ml-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all transform hover:scale-110 opacity-0 group-hover:opacity-100 border border-slate-100"
                 >
                     <ChevronLeft size={24} />
                 </button>
                 <button
                     onClick={nextTestimonial}
-                    className="pointer-events-auto -mr-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all transform hover:scale-110 opacity-0 group-hover:opacity-100"
+                    className="pointer-events-auto -mr-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all transform hover:scale-110 opacity-0 group-hover:opacity-100 border border-slate-100"
                 >
                     <ChevronRight size={24} />
                 </button>
             </div>
 
-            {/* Dots Navigation */}
-            <div className="flex justify-center gap-2 mt-6">
-                {testimonials.map((_, index) => (
+            {/* Combined Mobile Navigation & Dots */}
+            <div className="flex flex-col items-center gap-4 mt-8">
+                {/* Mobile Arrows */}
+                <div className="flex md:hidden items-center gap-6">
                     <button
-                        key={index}
-                        onClick={() => setCurrentIndex(index)}
-                        className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex
-                            ? "w-8 bg-gradient-to-r from-brand-purple to-brand-teal"
-                            : "w-2 bg-slate-300 hover:bg-slate-400"
-                            }`}
-                        aria-label={`Отзыв ${index + 1}`}
-                    />
-                ))}
+                        onClick={prevTestimonial}
+                        className="bg-white text-slate-800 p-3 rounded-full shadow-md border border-slate-100 active:scale-95 transition-transform"
+                    >
+                        <ChevronLeft size={20} />
+                    </button>
+                    <button
+                        onClick={nextTestimonial}
+                        className="bg-white text-slate-800 p-3 rounded-full shadow-md border border-slate-100 active:scale-95 transition-transform"
+                    >
+                        <ChevronRight size={20} />
+                    </button>
+                </div>
+
+                {/* Dots Navigation */}
+                <div className="flex justify-center gap-2">
+                    {testimonials.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setCurrentIndex(index)}
+                            className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex
+                                ? "w-8 bg-gradient-to-r from-brand-purple to-brand-teal"
+                                : "w-1.5 bg-slate-300 hover:bg-slate-400"
+                                }`}
+                            aria-label={`Отзыв ${index + 1}`}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );
@@ -499,7 +518,12 @@ const Cases = ({ onOpenModal }) => {
                     </div>
                 </div>
 
-                <div className="overflow-hidden">
+                <div
+                    className="overflow-hidden"
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                >
                     <div
                         className="flex transition-transform duration-500 ease-in-out [--slide-width:100%] md:[--slide-width:50%] lg:[--slide-width:33.333%]"
                         style={{ transform: `translateX(calc(var(--slide-width) * -${currentIndex}))` }}
@@ -533,35 +557,54 @@ const Cases = ({ onOpenModal }) => {
                     </div>
                 </div>
 
-                {/* Navigation Buttons (Absolute, like Testimonials) */}
-                <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between pointer-events-none mt-20 md:mt-0">
+                {/* Navigation Buttons (Desktop Only) */}
+                <div className="hidden md:flex absolute inset-y-0 left-0 right-0 items-center justify-between pointer-events-none">
                     <button
                         onClick={prevCase}
-                        className="pointer-events-auto -ml-2 md:-ml-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all transform hover:scale-110 opacity-100 md:opacity-0 md:group-hover:opacity-100 border border-slate-100"
+                        className="pointer-events-auto -ml-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all transform hover:scale-110 opacity-100 md:opacity-0 md:group-hover:opacity-100 border border-slate-100"
                     >
                         <ChevronLeft size={24} />
                     </button>
                     <button
                         onClick={nextCase}
-                        className="pointer-events-auto -mr-2 md:-mr-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all transform hover:scale-110 opacity-100 md:opacity-0 md:group-hover:opacity-100 border border-slate-100"
+                        className="pointer-events-auto -mr-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all transform hover:scale-110 opacity-100 md:opacity-0 md:group-hover:opacity-100 border border-slate-100"
                     >
                         <ChevronRight size={24} />
                     </button>
                 </div>
 
-                {/* Dots Navigation (Unified) */}
-                <div className="flex justify-center gap-2 mt-6">
-                    {cases.map((_, i) => (
+                {/* Mobile Navigation & Dots */}
+                <div className="flex flex-col items-center gap-4 mt-8">
+                    {/* Mobile Arrows */}
+                    <div className="flex md:hidden items-center gap-6">
                         <button
-                            key={i}
-                            onClick={() => setCurrentIndex(i)}
-                            className={`h-2 rounded-full transition-all duration-300 ${i === currentIndex
-                                ? "w-8 bg-gradient-to-r from-brand-purple to-brand-teal"
-                                : "w-2 bg-slate-300 hover:bg-slate-400"
-                                }`}
-                            aria-label={`Кейс ${i + 1}`}
-                        />
-                    ))}
+                            onClick={prevCase}
+                            className="bg-white text-slate-800 p-3 rounded-full shadow-md border border-slate-100 active:scale-95 transition-transform"
+                        >
+                            <ChevronLeft size={20} />
+                        </button>
+                        <button
+                            onClick={nextCase}
+                            className="bg-white text-slate-800 p-3 rounded-full shadow-md border border-slate-100 active:scale-95 transition-transform"
+                        >
+                            <ChevronRight size={20} />
+                        </button>
+                    </div>
+
+                    {/* Dots Navigation */}
+                    <div className="flex justify-center gap-2">
+                        {cases.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setCurrentIndex(i)}
+                                className={`h-2 rounded-full transition-all duration-300 ${i === currentIndex
+                                    ? "w-8 bg-gradient-to-r from-brand-purple to-brand-teal"
+                                    : "w-1.5 bg-slate-300 hover:bg-slate-400"
+                                    }`}
+                                aria-label={`Кейс ${i + 1}`}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
 

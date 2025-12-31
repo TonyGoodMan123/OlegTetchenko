@@ -82,6 +82,41 @@ const TestimonialsCarousel = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
 
+    // Swipe logic
+    const touchStartX = useRef(null);
+    const touchEndX = useRef(null);
+    const minSwipeDistance = 50;
+
+    const onTouchStart = (e) => {
+        touchStartX.current = e.targetTouches[0].clientX;
+        touchEndX.current = null;
+        setIsHovered(true); // Pause auto-scroll on touch
+    };
+
+    const onTouchMove = (e) => {
+        touchEndX.current = e.targetTouches[0].clientX;
+    };
+
+    const onTouchEnd = () => {
+        if (!touchStartX.current || !touchEndX.current) return;
+
+        const distance = touchStartX.current - touchEndX.current;
+        const isLeftSwipe = distance > minSwipeDistance;
+        const isRightSwipe = distance < -minSwipeDistance;
+
+        if (isLeftSwipe) {
+            nextTestimonial();
+        } else if (isRightSwipe) {
+            prevTestimonial();
+        }
+
+        // Reset
+        touchStartX.current = null;
+        touchEndX.current = null;
+        // Don't unpause immediately to allow reading
+        setTimeout(() => setIsHovered(false), 2000);
+    };
+
     // Auto-scroll every 3 seconds (advance by 1 card)
     useEffect(() => {
         if (isHovered) return;
@@ -106,7 +141,12 @@ const TestimonialsCarousel = () => {
             onMouseLeave={() => setIsHovered(false)}
         >
             {/* Carousel Container */}
-            <div className="overflow-hidden">
+            <div
+                className="overflow-hidden"
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
+            >
                 <div
                     className="flex transition-transform duration-500 ease-in-out [--slide-width:100%] md:[--slide-width:50%] lg:[--slide-width:33.333%]"
                     style={{ transform: `translateX(calc(var(--slide-width) * -${currentIndex}))` }}

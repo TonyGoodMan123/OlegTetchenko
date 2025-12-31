@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Section from './ui/Section';
 import SectionTitle from './ui/SectionTitle';
-import Card from './ui/Card';
 import { ArrowRightIcon, Play, Star, ChevronLeft, ChevronRight } from './ui/icons';
 import caseDenisBefore from '../assets/case_denis_before.jpg';
 import caseDenisAfter from '../assets/case_denis_after.jpg';
 import caseMarinaBefore from '../assets/case_marina_before.jpg';
 import caseMarinaAfterPreview from '../assets/case_marina_after_preview.png';
+import caseEvgeniaPreview from '../assets/case_evgenia_preview.jpg';
+import caseSergeyBefore from '../assets/case_sergey_before.jpg';
+import caseSergeyAfter from '../assets/case_sergey_after.jpg';
+import caseSergeyExercises from '../assets/case_sergey_exercises.jpg';
+import caseNatalyaPreview from '../assets/case_natalya_preview.jpg';
+import caseYuliaPart1 from '../assets/case_yulia_part1.jpg';
+import caseYuliaPart2 from '../assets/case_yulia_part2.jpg';
+import caseIrinaPreview from '../assets/case_irina_preview.jpg';
 
-// Testimonials Carousel Component
+
+// Testimonials Carousel Component (Unchanged)
 const TestimonialsCarousel = () => {
     const testimonials = [
         {
@@ -71,11 +79,11 @@ const TestimonialsCarousel = () => {
     // Add first 2 testimonials to the end to prevent empty spaces on desktop
     const displayTestimonials = [...testimonials, ...testimonials.slice(0, 2)];
 
-    const [currentIndex, setCurrentIndex] = React.useState(0);
-    const [isHovered, setIsHovered] = React.useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isHovered, setIsHovered] = useState(false);
 
     // Auto-scroll every 3 seconds (advance by 1 card)
-    React.useEffect(() => {
+    useEffect(() => {
         if (isHovered) return;
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -166,13 +174,308 @@ const TestimonialsCarousel = () => {
 
 
 const Cases = ({ onOpenModal }) => {
-    // --- Cases Carousel State ---
-    const [currentCaseIndex, setCurrentCaseIndex] = React.useState(0);
-    const [isHoveredCases, setIsHoveredCases] = React.useState(false);
-    const totalCases = 3;
+    // --- Cases Data ---
+    const cases = [
+        {
+            id: 'marina',
+            name: 'Марина, 35 лет',
+            tag: 'Боль в спине от кишечника',
+            details: [
+                { label: 'Проблема', text: '5 лечебных блокад не помогли. Боль мешала сидеть и есть.' },
+                { label: 'Диагностика', text: 'Воспаление в кишечнике отключило мышцы пресса → перегруз поясницы.' },
+                { label: 'Решение', text: 'Висцеральная терапия. Боль ушла за 1 сеанс.' }
+            ],
+            footer: 'Лечим причину, а не симптом',
+            link: 'https://vkvideo.ru/video-212898269_456239036',
+            type: 'split_image_video',
+            image: caseMarinaBefore,
+            preview: caseMarinaAfterPreview
+        },
+        {
+            id: 'denis',
+            name: 'Денис, 24 года',
+            tag: 'Коррекция перекоса за 1 сеанс',
+            details: [
+                { label: 'Проблема', text: 'Тело «ушло» влево. Компенсаторная цепь: укорочение мышц поясницы, скрученный таз, дисбаланс шеи.' },
+                { label: 'Решение', text: 'Нашли первопричину. Убрали гипертонус — тело само вернулось в симметрию.' }
+            ],
+            footer: 'Системный подход кинезиологии',
+            link: 'https://vk.com/kineziolog_89',
+            type: 'split_image_image',
+            image: caseDenisBefore,
+            imageAfter: caseDenisAfter
+        },
+        {
+            id: 'evgenia',
+            name: 'Евгения, 40 лет',
+            tag: 'Плечелопаточный периартрит',
+            details: [
+                { label: 'Диагностика', text: 'Гипертонус лестничных мышц шеи, дисфункция подлопаточной мышцы, гипертонус мышцы поднимающей лопатку.' },
+                { label: 'Результат', text: 'Улучшилась подвижность плечевого сустава после первого сеанса. Боль прошла после курса лечения и домашних упражнений.' }
+            ],
+            footer: 'Видео до/после',
+            link: 'https://vkvideo.ru/clip-212898269_456239480',
+            type: 'video_single_label',
+            label: 'ДО/ПОСЛЕ',
+            showDualLabels: true,
+            image: caseEvgeniaPreview
+        },
+        {
+            id: 'sergey',
+            name: 'Сергей, 48 лет',
+            tag: 'Синдром замороженного плеча',
+            details: [
+                { label: 'Диагностика', text: 'ПЭДФ (психоэмоциональная дисфункция), гипертонус лестничных мышц шеи, дисфункция подлопаточной мышцы.' },
+                { label: 'Лечение', text: '4 сеанса + самостоятельная работа дома и в зале.' },
+                { label: 'Результат', text: 'Улучшена подвижность плечевого сустава, боль прошла, качество жизни восстановлено.' }
+            ],
+            footer: '3 видео: До, После, Упражнения',
+            type: 'video_triple',
+            links: [
+                'https://vkvideo.ru/clip-212898269_456239481',
+                'https://vkvideo.ru/clip-212898269_456239482',
+                'https://vkvideo.ru/clip-212898269_456239483'
+            ],
+            images: [
+                caseSergeyBefore,
+                caseSergeyAfter,
+                caseSergeyExercises
+            ]
+        },
+        {
+            id: 'natalya',
+            name: 'Наталья, 44 года',
+            tag: '10 лет боли в спине',
+            details: [
+                { label: 'Диагностика', text: 'Гипертонус подвздошно-поясничной мышцы, вызванный проблемами ЖКТ и слабостью прямой мышцы живота.' },
+                { label: 'Лечение', text: '2 сеанса + рекомендации по укреплению мышц спины и суставная гимнастика.' },
+                { label: 'Результат', text: 'Боль прошла, улучшилась подвижность.' }
+            ],
+            footer: 'Видео отзыв пациента',
+            link: 'https://vkvideo.ru/video-212898269_456239107',
+            type: 'video_single_label',
+            label: 'ВИДЕО ОТЗЫВ',
+            objectPosition: '[object-position:center_25%]',
+            image: caseNatalyaPreview
+        },
+        {
+            id: 'yulia',
+            name: 'Юлия',
+            tag: 'Диастаз и дискомфорт в пояснице',
+            details: [
+                { label: 'Проблема', text: 'Прямая и косые мышцы живота «выключены», нагрузка уходит в поясницу, это поддерживает расхождение по белой линии.' },
+                { label: 'Решение', text: 'Тейпирование для поддержки, нейромышечная активация пресса, дыхание и стабилизация, домашняя программа.' },
+                { label: 'Результат', text: 'Включены мышечные связи, диастаз минимален, восстановлен контроль корпуса.' }
+            ],
+            footer: '2 видео: Диагностика и Коррекция',
+            type: 'video_double',
+            links: [
+                'https://vk.com/clip-212898269_456239420',
+                'https://vk.com/clip-212898269_456239425'
+            ],
+            images: [
+                caseYuliaPart1,
+                caseYuliaPart2
+            ]
+        },
+        {
+            id: 'irina',
+            name: 'Ирина, 37 лет',
+            tag: 'Аллергический насморк',
+            details: [
+                { label: 'Проблема', text: 'Заложенность, аллергический насморк, тяжелое дыхание.' },
+                { label: 'Диагностика', text: 'Смещение решетчатой кости и нарушение работы ВНЧС.' },
+                { label: 'Результат', text: 'Свободное дыхание, ушла отечность после первого сеанса.' }
+            ],
+            footer: 'Отзыв после 1 сеанса',
+            link: 'https://vkvideo.ru/video-212898269_456239099',
+            type: 'video_single_label',
+            label: 'ВИДЕО ОТЗЫВ',
+            objectPosition: '[object-position:center_25%]',
+            image: caseIrinaPreview
+        }
+    ];
 
-    const nextCase = () => setCurrentCaseIndex((prev) => (prev + 1) % totalCases);
-    const prevCase = () => setCurrentCaseIndex((prev) => (prev - 1 + totalCases) % totalCases);
+
+    // --- State & Logic ---
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isHovered, setIsHovered] = useState(false);
+
+    // Add first 2 cases to end to prevent whitespace on large screens
+    const displayCases = [...cases, ...cases.slice(0, 2)];
+
+    // Swipe logic
+    const touchStartX = useRef(null);
+    const touchEndX = useRef(null);
+    const minSwipeDistance = 50;
+
+    const onTouchStart = (e) => {
+        touchStartX.current = e.targetTouches[0].clientX;
+        touchEndX.current = null;
+        setIsHovered(true); // Pause auto-scroll on touch
+    };
+
+    const onTouchMove = (e) => {
+        touchEndX.current = e.targetTouches[0].clientX;
+    };
+
+    const onTouchEnd = () => {
+        if (!touchStartX.current || !touchEndX.current) return;
+
+        const distance = touchStartX.current - touchEndX.current;
+        const isLeftSwipe = distance > minSwipeDistance;
+        const isRightSwipe = distance < -minSwipeDistance;
+
+        if (isLeftSwipe) {
+            nextCase();
+        } else if (isRightSwipe) {
+            prevCase();
+        }
+
+        // Reset
+        touchStartX.current = null;
+        touchEndX.current = null;
+        // Don't unpause immediately to allow reading
+        setTimeout(() => setIsHovered(false), 2000);
+    };
+
+    // Auto-scroll
+    useEffect(() => {
+        if (isHovered) return;
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % cases.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [isHovered, cases.length]);
+
+    const nextCase = () => {
+        setCurrentIndex((prev) => (prev + 1) % cases.length);
+    };
+
+    const prevCase = () => {
+        setCurrentIndex((prev) => (prev - 1 + cases.length) % cases.length);
+    };
+
+    // Helper to render media content based on type
+    const renderMedia = (c) => {
+        switch (c.type) {
+            case 'split_image_video':
+                return (
+                    <div className="relative h-48 flex">
+                        <div className="w-1/2 h-full relative">
+                            <img src={c.image} alt="До лечения" className="w-full h-full object-cover object-top" />
+                            <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ДО</div>
+                        </div>
+                        <div
+                            className="w-1/2 h-full relative border-l border-white/20 bg-slate-900 cursor-pointer group/video"
+                            onClick={() => window.open(c.link, '_blank')}
+                        >
+                            <img src={c.preview} alt="Видео отзыв" className="w-full h-full object-cover opacity-80 group-hover/video:opacity-60 transition-opacity" />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 group-hover/video:scale-110 transition-transform">
+                                    <Play size={16} className="text-white ml-1" fill="white" />
+                                </div>
+                            </div>
+                            <div className="absolute top-2 right-2 bg-teal-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ПОСЛЕ</div>
+                        </div>
+                    </div>
+                );
+            case 'split_image_image':
+                return (
+                    <div className="relative h-48 flex">
+                        <div className="w-1/2 h-full relative">
+                            <img src={c.image} alt="До лечения" className="w-full h-full object-cover" />
+                            <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ДО</div>
+                        </div>
+                        <div className="w-1/2 h-full relative border-l border-white/20">
+                            <img src={c.imageAfter} alt="После лечения" className="w-full h-full object-cover" />
+                            <div className="absolute top-2 right-2 bg-teal-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ПОСЛЕ</div>
+                        </div>
+                    </div>
+                );
+            case 'video_single_label':
+                return (
+                    <div
+                        className="relative h-48 bg-slate-900 cursor-pointer group/video"
+                        onClick={() => window.open(c.link, '_blank')}
+                    >
+                        {c.image && (
+                            <img src={c.image} alt="Видео превью" className={`w-full h-full object-cover ${c.objectPosition || 'object-center'} opacity-90 group-hover/video:opacity-75 transition-opacity`} />
+                        )}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 group-hover/video:scale-110 transition-transform">
+                                <Play size={20} className="text-white ml-1" fill="white" />
+                            </div>
+                        </div>
+                        {c.showDualLabels ? (
+                            <>
+                                <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ДО</div>
+                                <div className="absolute top-2 right-2 bg-teal-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ПОСЛЕ</div>
+                            </>
+                        ) : (
+                            <div className="absolute top-2 left-2 bg-gradient-to-r from-brand-purple to-brand-teal text-white text-[10px] font-bold px-2 py-1 rounded">{c.label}</div>
+                        )}
+                    </div>
+                );
+            case 'video_triple':
+                return (
+                    <div className="relative h-48 flex">
+                        <div className="w-1/3 h-full relative bg-slate-900 cursor-pointer group/v1" onClick={(e) => { e.stopPropagation(); window.open(c.links[0], '_blank'); }}>
+                            <img src={c.images[0]} alt="До" className="w-full h-full object-cover opacity-90 group-hover/v1:opacity-75 transition-opacity" />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 group-hover/v1:scale-110 transition-transform">
+                                    <Play size={12} className="text-white ml-0.5" fill="white" />
+                                </div>
+                            </div>
+                            <div className="absolute top-2 left-1 bg-black/60 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded">ДО</div>
+                        </div>
+                        <div className="w-1/3 h-full relative bg-slate-800 cursor-pointer border-l border-white/20 group/v2" onClick={(e) => { e.stopPropagation(); window.open(c.links[1], '_blank'); }}>
+                            <img src={c.images[1]} alt="После" className="w-full h-full object-cover opacity-90 group-hover/v2:opacity-75 transition-opacity" />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 group-hover/v2:scale-110 transition-transform">
+                                    <Play size={12} className="text-white ml-0.5" fill="white" />
+                                </div>
+                            </div>
+                            <div className="absolute top-2 left-1 bg-teal-500/90 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded">ПОСЛЕ</div>
+                        </div>
+                        <div className="w-1/3 h-full relative bg-slate-700 cursor-pointer border-l border-white/20 group/v3" onClick={(e) => { e.stopPropagation(); window.open(c.links[2], '_blank'); }}>
+                            <img src={c.images[2]} alt="МТБ" className="w-full h-full object-cover opacity-90 group-hover/v3:opacity-75 transition-opacity" />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 group-hover/v3:scale-110 transition-transform">
+                                    <Play size={12} className="text-white ml-0.5" fill="white" />
+                                </div>
+                            </div>
+                            <div className="absolute top-2 right-1 bg-purple-500/90 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded">Востановление</div>
+                        </div>
+                    </div>
+                );
+            case 'video_double':
+                return (
+                    <div className="relative h-48 flex">
+                        <div className="w-1/2 h-full relative bg-slate-900 cursor-pointer group/v1" onClick={(e) => { e.stopPropagation(); window.open(c.links[0], '_blank'); }}>
+                            <img src={c.images[0]} alt="Часть 1" className="w-full h-full object-cover opacity-90 group-hover/v1:opacity-75 transition-opacity" />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 group-hover/v1:scale-110 transition-transform">
+                                    <Play size={16} className="text-white ml-0.5" fill="white" />
+                                </div>
+                            </div>
+                            <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded">ДО</div>
+                        </div>
+                        <div className="w-1/2 h-full relative bg-slate-800 cursor-pointer border-l border-white/20 group/v2" onClick={(e) => { e.stopPropagation(); window.open(c.links[1], '_blank'); }}>
+                            <img src={c.images[1]} alt="Часть 2" className="w-full h-full object-cover opacity-90 group-hover/v2:opacity-75 transition-opacity" />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 group-hover/v2:scale-110 transition-transform">
+                                    <Play size={16} className="text-white ml-0.5" fill="white" />
+                                </div>
+                            </div>
+                            <div className="absolute top-2 right-2 bg-teal-500/90 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded">ПОСЛЕ</div>
+                        </div>
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
 
     return (
         <Section id="cases" bg="white">
@@ -181,193 +484,84 @@ const Cases = ({ onOpenModal }) => {
                 subtitle="Реальные истории пациентов. Что было до, что делали и каких результатов удалось добиться."
             />
 
-            {/* <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {[
-                {
-                    label: "Кейс: плечевой сустав",
-                    title: "Боль в плече",
-                    before: "1,5 месяца боли в плече, ограничение поднятия руки.",
-                    process: "2 приёма, работа с плечевым поясом и шейным отделом.",
-                    result: "Рука поднимается без боли, восстановлен объём движения.",
-                    time: "2 приёма за 10 дней"
-                },
-                {
-                    label: "Кейс: неврология",
-                    title: "Онемение руки",
-                    before: "Онемение левой руки, страх «ущемления нерва».",
-                    process: "Мягкая коррекция шеи, диафрагмы, грудного отдела.",
-                    result: "Онемение ушло, стало легче работать и спать.",
-                    time: "1 приём"
-                },
-                {
-                    label: "Кейс: после родов",
-                    title: "Боль в спине",
-                    before: "Боль в спине после родов, тяжело держать ребёнка.",
-                    process: "Работа с тазом, животом, дыханием.",
-                    result: "Уменьшилась боль, вернулся контроль над телом.",
-                    time: "3 приёма за 3 недели"
-                }
-            ].map((c, i) => (
-                <Card key={i} className="flex flex-col h-full border border-slate-100 shadow-sm hover:shadow-md transition-all">
-                    <div className="mb-4">
-                        <span className="inline-block px-3 py-1 rounded-full bg-purple-50 text-brand-purple text-xs font-bold uppercase tracking-wide">
-                            {c.label}
-                        </span>
-                    </div>
-                    <h3 className="text-xl font-bold text-slate-800 mb-4">{c.title}</h3>
-
-                    <div className="space-y-3 text-sm flex-grow">
-                        <div className="p-3 bg-slate-50 rounded-xl">
-                            <span className="font-bold text-slate-700 block mb-1">До:</span>
-                            <span className="text-slate-600">{c.before}</span>
-                        </div>
-                        <div className="p-3 bg-slate-50 rounded-xl">
-                            <span className="font-bold text-slate-700 block mb-1">Что делали:</span>
-                            <span className="text-slate-600">{c.process}</span>
-                        </div>
-                        <div className="p-3 bg-teal-50 rounded-xl border border-teal-100">
-                            <span className="font-bold text-teal-700 block mb-1">Результат:</span>
-                            <span className="text-teal-800">{c.result}</span>
-                        </div>
-                    </div>
-
-                    <div className="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
-                        <span className="text-xs font-medium text-slate-400">{c.time}</span>
-                        <a href="https://vk.com/kineziolog_89" className="text-xs font-bold text-brand-purple hover:underline flex items-center">
-                            Смотреть детали <Play size={12} className="ml-1" />
-                        </a>
-                    </div>
-                </Card>
-            ))}
-        </div> */}
-
-            <div className="mb-16 group relative" onMouseEnter={() => setIsHoveredCases(true)} onMouseLeave={() => setIsHoveredCases(false)}>
-                <h3 className="text-2xl font-serif font-bold text-slate-800 mb-2">Кейсы обращений (До/После)</h3>
-                <p className="text-slate-500 mb-8">Видео и фото, показывающие реальные изменения после работы.</p>
-
-                <div className="overflow-hidden -mx-4 px-4 md:overflow-visible md:px-0">
-                    <div
-                        className="flex transition-transform duration-500 ease-in-out md:transform-none"
-                        style={{ transform: `translateX(calc(-100% * ${currentCaseIndex}))` }}
-                    >
-                        {/* Case 1: Marina */}
-                        <div className="w-full md:w-1/3 flex-shrink-0 pr-4 md:pr-0 md:px-3">
-                            <div className="group cursor-pointer h-full" onClick={() => window.open('https://vkvideo.ru/video-212898269_456239036', '_blank')}>
-                                <div className="bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-all h-full flex flex-col">
-                                    <div className="relative h-48 flex">
-                                        <div className="w-1/2 h-full relative">
-                                            <img src={caseMarinaBefore} alt="До лечения" className="w-full h-full object-cover object-top" />
-                                            <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ДО</div>
-                                        </div>
-                                        <div className="w-1/2 h-full relative border-l border-white/20 bg-slate-900 group-hover:bg-slate-800 transition-colors">
-                                            <img src={caseMarinaAfterPreview} alt="Видео отзыв" className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity" />
-                                            <div className="absolute inset-0 flex items-center justify-center">
-                                                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
-                                                    <Play size={16} className="text-white ml-1" fill="white" />
-                                                </div>
-                                            </div>
-                                            <div className="absolute top-2 right-2 bg-teal-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ПОСЛЕ</div>
-                                        </div>
-                                    </div>
-                                    <div className="p-5 flex flex-col flex-grow">
-                                        <div className="mb-3">
-                                            <h4 className="font-bold text-slate-800 text-lg leading-tight">Марина, 35 лет</h4>
-                                            <p className="text-brand-purple text-xs font-bold uppercase tracking-wide mt-1">Боль в спине от кишечника</p>
-                                        </div>
-                                        <div className="space-y-3 text-xs text-slate-600 mb-4 flex-grow">
-                                            <p><strong className="text-slate-700">Проблема:</strong> 5 лечебных блокад не помогли. Боль мешала сидеть и есть.</p>
-                                            <p><strong className="text-slate-700">Диагностика:</strong> Воспаление в кишечнике отключило мышцы пресса → перегруз поясницы.</p>
-                                            <p><strong className="text-slate-700">Решение:</strong> Висцеральная терапия. Боль ушла за 1 сеанс.</p>
-                                        </div>
-                                        <div className="pt-3 border-t border-slate-100 mt-auto flex justify-between items-center">
-                                            <span className="text-[10px] text-slate-400 font-medium">Лечим причину, а не симптом</span>
-                                            <ArrowRightIcon size={12} className="text-brand-purple" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Case 2: Generic Video */}
-                        <div className="w-full md:w-1/3 flex-shrink-0 pr-4 md:pr-0 md:px-3">
-                            <div className="group cursor-pointer h-full flex flex-col" onClick={() => window.open('https://vk.com/kineziolog_89', '_blank')}>
-                                <div className="relative rounded-2xl overflow-hidden aspect-video bg-slate-900 flex-shrink-0">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
-                                    <div className="absolute inset-0 flex items-center justify-center z-20 group-hover:scale-110 transition-transform duration-300">
-                                        <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
-                                            <Play size={24} className="text-white ml-1" fill="white" />
-                                        </div>
-                                    </div>
-                                    <span className="absolute bottom-4 left-4 text-white font-bold text-sm z-20">Видео-кейс: Работа с осанкой</span>
-                                </div>
-                                <div className="flex-grow flex items-end">
-                                    <a href="https://vk.com/kineziolog_89" target="_blank" className="inline-flex items-center text-xs font-bold text-blue-600 mt-3 hover:underline">
-                                        Смотреть во ВКонтакте <ArrowRightIcon size={12} className="ml-1" />
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Case 3: Denis */}
-                        <div className="w-full md:w-1/3 flex-shrink-0 pr-4 md:pr-0 md:px-3">
-                            <div className="group cursor-pointer h-full" onClick={() => window.open('https://vk.com/kineziolog_89', '_blank')}>
-                                <div className="bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-all h-full flex flex-col">
-                                    <div className="relative h-48 flex">
-                                        <div className="w-1/2 h-full relative">
-                                            <img src={caseDenisBefore} alt="До лечения" className="w-full h-full object-cover" />
-                                            <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ДО</div>
-                                        </div>
-                                        <div className="w-1/2 h-full relative border-l border-white/20">
-                                            <img src={caseDenisAfter} alt="После лечения" className="w-full h-full object-cover" />
-                                            <div className="absolute top-2 right-2 bg-teal-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">ПОСЛЕ</div>
-                                        </div>
-                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors z-10 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                                            <div className="bg-white/90 backdrop-blur text-slate-900 text-xs font-bold px-3 py-2 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all">
-                                                Подробнее VK
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="p-5 flex flex-col flex-grow">
-                                        <div className="mb-3">
-                                            <h4 className="font-bold text-slate-800 text-lg leading-tight">Денис, 24 года</h4>
-                                            <p className="text-brand-purple text-xs font-bold uppercase tracking-wide mt-1">Коррекция перекоса за 1 сеанс</p>
-                                        </div>
-                                        <div className="space-y-3 text-xs text-slate-600 mb-4 flex-grow">
-                                            <p><strong className="text-slate-700">Проблема:</strong> Тело «ушло» влево. Компенсаторная цепь: укорочение мышц поясницы, скрученный таз, дисбаланс шеи.</p>
-                                            <p><strong className="text-slate-700">Решение:</strong> Нашли первопричину. Убрали гипертонус — тело само вернулось в симметрию.</p>
-                                        </div>
-                                        <div className="pt-3 border-t border-slate-100 mt-auto">
-                                            <span className="text-[10px] text-slate-400 font-medium">Системный подход кинезиологии</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div
+                className="mb-16 group relative"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
+            >
+                <div className="flex justify-between items-end mb-6 px-4">
+                    <div>
+                        <h3 className="text-2xl font-serif font-bold text-slate-800 mb-2">Кейсы обращений (До/После)</h3>
+                        <p className="text-slate-500">Видео и фото, показывающие реальные изменения после работы.</p>
                     </div>
                 </div>
 
-                {/* Mobile Navigation Buttons */}
-                <div className="flex md:hidden justify-between items-center mt-4 px-4">
+                <div className="overflow-hidden">
+                    <div
+                        className="flex transition-transform duration-500 ease-in-out [--slide-width:100%] md:[--slide-width:50%] lg:[--slide-width:33.333%]"
+                        style={{ transform: `translateX(calc(var(--slide-width) * -${currentIndex}))` }}
+                    >
+                        {displayCases.map((c, i) => (
+                            <div className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-3">
+                                <div className="h-full">
+                                    <div className="bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 shadow-sm transition-all h-full flex flex-col">
+
+                                        {renderMedia(c)}
+
+                                        <div className="p-5 flex flex-col flex-grow">
+                                            <div className="mb-3">
+                                                <h4 className="font-bold text-slate-800 text-lg leading-tight">{c.name}</h4>
+                                                <p className="text-brand-purple text-xs font-bold uppercase tracking-wide mt-1">{c.tag}</p>
+                                            </div>
+                                            <div className="space-y-3 text-xs text-slate-600 mb-4 flex-grow">
+                                                {c.details.map((d, index) => (
+                                                    <p key={index}><strong className="text-slate-700">{d.label}:</strong> {d.text}</p>
+                                                ))}
+                                            </div>
+                                            <div className="pt-3 border-t border-slate-100 mt-auto flex justify-between items-center">
+                                                <span className="text-[10px] text-slate-400 font-medium">{c.footer}</span>
+                                                <ArrowRightIcon size={12} className="text-brand-purple" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Navigation Buttons (Absolute, like Testimonials) */}
+                <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between pointer-events-none mt-20 md:mt-0">
                     <button
                         onClick={prevCase}
-                        className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
+                        className="pointer-events-auto -ml-2 md:-ml-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all transform hover:scale-110 opacity-100 md:opacity-0 md:group-hover:opacity-100 border border-slate-100"
                     >
                         <ChevronLeft size={24} />
                     </button>
-                    <div className="flex gap-2">
-                        {[0, 1, 2].map((i) => (
-                            <div
-                                key={i}
-                                className={`h-1.5 rounded-full transition-all ${i === currentCaseIndex ? 'w-6 bg-brand-purple' : 'w-1.5 bg-slate-200'}`}
-                            />
-                        ))}
-                    </div>
                     <button
                         onClick={nextCase}
-                        className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
+                        className="pointer-events-auto -mr-2 md:-mr-4 bg-white/90 hover:bg-white text-slate-800 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all transform hover:scale-110 opacity-100 md:opacity-0 md:group-hover:opacity-100 border border-slate-100"
                     >
                         <ChevronRight size={24} />
                     </button>
+                </div>
+
+                {/* Dots Navigation (Unified) */}
+                <div className="flex justify-center gap-2 mt-6">
+                    {cases.map((_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => setCurrentIndex(i)}
+                            className={`h-2 rounded-full transition-all duration-300 ${i === currentIndex
+                                ? "w-8 bg-gradient-to-r from-brand-purple to-brand-teal"
+                                : "w-2 bg-slate-300 hover:bg-slate-400"
+                                }`}
+                            aria-label={`Кейс ${i + 1}`}
+                        />
+                    ))}
                 </div>
             </div>
 
@@ -377,7 +571,6 @@ const Cases = ({ onOpenModal }) => {
             </div>
         </Section>
     );
-
 };
 
 export default Cases;

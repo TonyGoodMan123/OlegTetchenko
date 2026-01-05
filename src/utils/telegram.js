@@ -13,6 +13,7 @@ export const sendTelegramMessage = async (formData) => {
             body: JSON.stringify({
                 name: formData.name,
                 phone: formData.phone,
+                chat_id: '-1003496210379', // Target Group ID
             }),
         });
 

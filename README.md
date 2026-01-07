@@ -1,16 +1,67 @@
-# React + Vite
+# WebOleg - Сайт кинезиолога
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Веб-сайт для кинезиолога Олега Тетченко, построенный на React + Vite.
 
-Currently, two official plugins are available:
+## 🚀 Быстрый старт
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+# Установка зависимостей
+npm install
 
-## React Compiler
+# Запуск dev-сервера
+npm run dev
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# Сборка для продакшена
+npm run build
+```
 
-## Expanding the ESLint configuration
+## 📱 Интеграция с Telegram
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Сайт интегрирован с Telegram-ботом для отправки заявок из формы обратной связи в группу.
+
+### Настройка Telegram-бота
+
+Для полной настройки интеграции см. файл [TELEGRAM_QUICKSTART.md](./TELEGRAM_QUICKSTART.md).
+
+**Кратко:**
+1. Получите токен бота у [@BotFather](https://t.me/botfather)
+2. Добавьте бота в вашу группу
+3. Разверните Cloudflare Worker (код в `cloudflare-worker/worker.js`)
+4. Добавьте `BOT_TOKEN` в секреты Cloudflare
+
+📖 **Подробная инструкция**: [CLOUDFLARE_SETUP.md](./CLOUDFLARE_SETUP.md)
+
+## 📁 Структура проекта
+
+```
+WebOleg/
+├── src/
+│   ├── components/     # React компоненты
+│   ├── utils/          # Утилиты (telegram.js)
+│   └── App.jsx         # Главный компонент
+├── cloudflare-worker/  # Код Cloudflare Worker
+│   └── worker.js       # Worker для Telegram API
+├── public/             # Статические файлы
+└── dist/              # Сборка проекта
+```
+
+## 🛠 Технологии
+
+- **React** - UI библиотека
+- **Vite** - Сборщик и dev-сервер
+- **Tailwind CSS** - Стилизация
+- **Cloudflare Workers** - Serverless функции для Telegram API
+
+## 📝 Разработка
+
+### ESLint
+
+Для расширенной конфигурации ESLint с TypeScript см. [документацию Vite](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts).
+
+### Компилятор React
+
+React Compiler не включен по умолчанию из-за влияния на производительность. Для добавления см. [документацию React](https://react.dev/learn/react-compiler/installation).
+
+## 📄 Лицензия
+
+Все права защищены.

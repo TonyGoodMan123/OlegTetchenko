@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 TEMPLATE_KIT/
+
+# Cloudflare Worker (deployed separately)
+# Uncomment if you don't want to track worker code in git:
+# cloudflare-worker/

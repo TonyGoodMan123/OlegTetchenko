@@ -75,8 +75,7 @@ export default {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: chat_id,
-                    text: message,
-                    parse_mode: 'HTML'
+                    text: message
                 })
             });
 

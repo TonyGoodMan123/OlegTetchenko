@@ -26,13 +26,13 @@ export default {
         try {
             // Парсинг данных из запроса
             const data = await request.json();
-            const { name, phone, chat_id } = data;
+            const { name, phone } = data;
 
             // Валидация данных
-            if (!name || !phone || !chat_id) {
+            if (!name || !phone) {
                 return new Response(JSON.stringify({ 
                     ok: false, 
-                    error: 'Missing required fields: name, phone, chat_id' 
+                    error: 'Missing required fields: name, phone' 
                 }), {
                     status: 400,
                     headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -43,6 +43,19 @@ export default {
             const BOT_TOKEN = env.BOT_TOKEN;
             if (!BOT_TOKEN) {
                 console.error('BOT_TOKEN not configured in environment');
+                return new Response(JSON.stringify({ 
+                    ok: false, 
+                    error: 'Server configuration error' 
+                }), {
+                    status: 500,
+                    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+                });
+            }
+
+            // Получаем chat_id из environment secrets или из запроса (для совместимости)
+            const chat_id = data.chat_id || env.CHAT_ID;
+            if (!chat_id) {
+                console.error('CHAT_ID not configured in environment and not provided in request');
                 return new Response(JSON.stringify({ 
                     ok: false, 
                     error: 'Server configuration error' 

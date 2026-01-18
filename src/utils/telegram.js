@@ -1,7 +1,7 @@
 // Secure telegram integration via Cloudflare Worker
 // Bot token is now stored securely in Worker secrets
 
-const WORKER_URL = 'https://olegweb-lead-to-telegram-api.scorcioner.workers.dev';
+const WORKER_URL = 'https://api.xn----btbehkecmhgsgjbd7ar1r2b.xn--p1ai';
 
 export const sendTelegramMessage = async (formData) => {
     try {

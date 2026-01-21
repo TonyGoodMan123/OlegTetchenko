@@ -1,7 +1,7 @@
 import React from 'react';
 import Section from './ui/Section';
 import SectionTitle from './ui/SectionTitle';
-import { ShieldCheck, ChevronLeft, ChevronRight, Award } from './ui/icons';
+import { ShieldCheck, ChevronLeft, ChevronRight } from './ui/icons';
 
 const About = ({ onOpenModal }) => {
     // --- Personal Gallery Data & State ---
@@ -166,7 +166,7 @@ const About = ({ onOpenModal }) => {
                                 Образование и навыки
                             </h4>
                             <ul className="space-y-4 text-slate-600">
-                                {["Среднее медицинское образование", "Прикладная кинезиология (базовые и продв. курсы)", "Остеопрактика (несколько ступеней)", "Работа с болью в области таза и позвоночника", "Мягкие мануальные и фасциальные техники"].map((item, i) => (
+                                {["Медицинское и физкультурное образование", "Прикладная кинезиология (углублённые курсы)", "Остеопрактика (5 ступеней)", "Работа с болью в мышцах и суставах, спине и шее, таза и позвоночника", "Мягкие мануальные и миофасциальные техники", "Нутрициология и практические методы похудения"].map((item, i) => (
                                     <li key={i} className="flex items-start">
                                         <span className="w-2 h-2 bg-brand-teal rounded-full mt-2 mr-3 flex-shrink-0"></span>
                                         <span className="leading-relaxed">{item}</span>

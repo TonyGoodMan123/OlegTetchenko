@@ -51,9 +51,9 @@ const Problems = () => {
             image: "/icons/sleep.png"
         },
         {
-            category: "Восстановление",
-            title: "После нагрузок и перенапряжения",
-            text: "Помощь телу в восстановлении после интенсивных тренировок, длительной сидячей работы или физического труда.",
+            category: "Живот и таз",
+            title: "Напряжение в области живота и таза",
+            text: "Мягкая работа с балансом таза и снятие внутреннего напряжения в области живота для улучшения общего самочувствия.",
             icon: CustomStomach,
             image: "/icons/stomach.png"
         },
@@ -65,9 +65,9 @@ const Problems = () => {
             image: "/icons/psychology.png"
         },
         {
-            category: "Живот и таз",
-            title: "Напряжение в области живота и таза",
-            text: "Мягкая работа с балансом таза и снятие внутреннего напряжения в области живота для улучшения общего самочувствия.",
+            category: "Здоровье стоп",
+            title: "Проблемы стоп и индивидуальные стельки",
+            text: "Быстрая утомляемость ног, боли в стопах, плоскостопие. Диагностика на специальном аппарате (подоскопе) и изготовление персональных стелек под вашу биомеханику.",
             icon: CustomFoot,
             image: "/icons/foot.png"
         }
@@ -88,9 +88,9 @@ const Problems = () => {
 
                 <defs>
                     <linearGradient id="energy-gradient-1" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#7c3aed" stopOpacity="0" />
-                        <stop offset="50%" stopColor="#7c3aed" stopOpacity="0.3" />
-                        <stop offset="100%" stopColor="#7c3aed" stopOpacity="0" />
+                        <stop offset="0%" stopColor="#591d81" stopOpacity="0" />
+                        <stop offset="50%" stopColor="#591d81" stopOpacity="0.3" />
+                        <stop offset="100%" stopColor="#591d81" stopOpacity="0" />
                     </linearGradient>
                     <linearGradient id="energy-gradient-2" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" stopColor="#0d9488" stopOpacity="0" />
@@ -107,16 +107,22 @@ const Problems = () => {
                 />
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                     {items.map((item, idx) => (
-                        <Card key={idx} className="relative h-full hover:-translate-y-1 transition-transform flex flex-col bg-slate-50 border border-slate-100 rounded-2xl p-6 pt-8">
-                            <div className="absolute top-4 right-4 w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-brand-purple shadow-sm overflow-hidden p-3 border border-slate-100">
+                        <Card key={idx} className="relative h-full hover:-translate-y-1 transition-transform flex flex-col items-center bg-slate-50 border border-slate-100 rounded-2xl p-6 pt-12 text-center">
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-brand-purple shadow-md overflow-hidden p-3 border border-slate-100">
                                 {item.image ? (
-                                    <img src={item.image} alt={item.title} className="w-full h-full object-contain" />
+                                    <img 
+                                        src={item.image} 
+                                        alt={item.title} 
+                                        className="w-full h-full object-contain" 
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
                                 ) : (
                                     <item.icon size={32} />
                                 )}
                             </div>
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 pr-16">{item.category}</div>
-                            <h3 className="text-xl font-bold text-slate-800 mb-3 pr-16">{item.title}</h3>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">{item.category}</div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-3">{item.title}</h3>
                             <p className="text-slate-600 leading-relaxed text-sm flex-grow">{item.text}</p>
                         </Card>
                     ))}

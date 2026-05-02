@@ -8,7 +8,7 @@ export default {
     extend: {
       colors: {
         brand: {
-          purple: '#8B5CF6', // More vibrant violet
+          purple: '#591d81', // Previous plum purple
           teal: '#14B8A6',   // More vibrant teal
           dark: '#1F1F1F',
         }

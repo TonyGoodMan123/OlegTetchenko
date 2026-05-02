@@ -10,9 +10,9 @@ const Method = () => (
             subtitle="Ваше тело даёт точные ответы. Я лишь помогаю их услышать."
         />
 
-        <div className="max-w-6xl mr-auto mb-16">
+        <div className="max-w-6xl mx-auto mb-16">
             <div className="bg-white rounded-[2.5rem] p-8 md:p-10 border border-slate-100 shadow-soft relative overflow-hidden grid md:grid-cols-2 gap-10 items-center">
-                <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-brand-purple to-brand-teal"></div>
+                <div className="absolute top-0 left-0 w-2 h-full bg-brand-purple"></div>
 
                 <div className="relative z-10">
                     <h3 className="text-2xl font-serif font-bold text-slate-800 mb-6">
@@ -27,7 +27,7 @@ const Method = () => (
                             Это помогает определить зоны напряжения, ограничения движения и подобрать <strong>индивидуальный план работы</strong>. Такой подход позволяет работать бережно, точно и эффективно.
                         </p>
                         <p className="flex items-center pt-2 font-medium text-brand-purple">
-                            <ShieldCheck className="mr-2 flex-shrink-0" size={20} />
+                            <ShieldCheck className="mr-2 flex-shrink-0" size={36} />
                             Безопасный и комплексный подход к восстановлению ресурса тела.
                         </p>
                     </div>
@@ -38,6 +38,8 @@ const Method = () => (
                         src="/images/method_photo.jpg"
                         alt="Олег Тетченко - анализ состояния"
                         className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
                     />
                 </div>
             </div>
@@ -66,12 +68,12 @@ const Method = () => (
                     text: "Чтобы эффект был долгим, я даю индивидуальные рекомендации: простые упражнения для дома и советы по повседневной активности для поддержания результата."
                 }
             ].map((item, idx) => (
-                <div key={idx} className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+                <div key={idx} className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow text-center flex flex-col items-center">
                     <div className="absolute top-0 right-0 p-6 opacity-10 font-serif text-8xl font-bold text-brand-purple select-none -mt-2 -mr-2">
                         {item.step}
                     </div>
-                    <div className="relative z-10">
-                        <h3 className="text-xl font-bold text-slate-800 mb-3 pr-8">{item.title}</h3>
+                    <div className="relative z-10 flex flex-col items-center">
+                        <h3 className="text-xl font-bold text-slate-800 mb-3">{item.title}</h3>
                         <p className="text-slate-600 leading-relaxed text-sm">
                             {item.text}
                         </p>
@@ -80,7 +82,7 @@ const Method = () => (
             ))}
         </div>
 
-        <div className="max-w-5xl mr-auto mb-16" id="directions">
+        <div className="max-w-5xl mx-auto mb-16" id="directions">
             <div className="bg-slate-50 rounded-[2.5rem] p-8 md:p-12 border border-slate-100">
                 <h3 className="text-2xl font-serif font-bold text-slate-800 mb-2 text-left">Основные направления работы</h3>
                 <p className="text-slate-500 text-left mb-10 max-w-2xl mr-auto">
@@ -106,7 +108,7 @@ const Method = () => (
                     ))}
                 </div>
 
-                <div className="w-full bg-gradient-to-r from-brand-purple to-brand-teal text-white rounded-2xl p-6 md:p-8 shadow-lg shadow-brand-teal/20 flex flex-col sm:flex-row gap-6 items-start relative overflow-hidden">
+                <div className="w-full bg-brand-purple text-white rounded-2xl p-6 md:p-8 shadow-lg shadow-brand-purple/20 flex flex-col sm:flex-row gap-6 items-start relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
 
                     <div className="text-white/90 flex-shrink-0 mt-1 hidden sm:block bg-white/20 p-3 rounded-full">
@@ -126,7 +128,7 @@ const Method = () => (
         </div>
 
         {/* --- New Block: Why Choose Me --- */}
-        <div className="max-w-5xl ml-auto">
+        <div className="max-w-5xl mx-auto">
             <div className="bg-white rounded-[2.5rem] p-8 md:p-12 border border-slate-100 shadow-soft">
                 <h3 className="text-2xl font-serif font-bold text-slate-800 mb-8 text-left">Почему выбирают меня</h3>
 

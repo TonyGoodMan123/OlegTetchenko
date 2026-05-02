@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from './ui/icons';
+import { Menu, X, Phone } from './ui/icons';
 import Button from './ui/Button';
 
 const Header = ({ onOpenModal }) => {
@@ -18,6 +18,14 @@ const Header = ({ onOpenModal }) => {
         if (el) el.scrollIntoView({ behavior: 'smooth' });
     };
 
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+    }, [isMenuOpen]);
+
     const navItems = [
         { name: 'Запросы', id: 'problems' },
         { name: 'Методика', id: 'method' },
@@ -28,18 +36,14 @@ const Header = ({ onOpenModal }) => {
     ];
 
     return (
-        <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? 'glass shadow-sm py-3' : 'bg-transparent py-5'}`}>
+        <header className={`fixed top-0 left-0 right-0 transition-all duration-300 ${isMenuOpen ? 'z-[200] bg-white' : scrolled ? 'z-40 glass shadow-sm py-3' : 'z-40 bg-transparent py-5'}`}>
             <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
                 <div className="flex items-center cursor-pointer gap-2 md:gap-4" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                     {/* Logo - visible on all devices */}
                     <img src="/images/logo.png" alt="Logo" className="h-8 w-8 md:h-12 md:w-12 object-contain" />
 
                     <h1 className="font-serif font-bold text-slate-800 flex items-center gap-2 text-base md:text-2xl">
-                        Олег Тетченко
-                        <span className="text-slate-400 font-light">|</span>
-                        <span className="font-sans font-medium text-slate-500 text-sm md:text-xl">
-                            Специалист по телесным практикам
-                        </span>
+                        Специалист по телесным практикам
                     </h1>
                 </div>
 
@@ -52,28 +56,54 @@ const Header = ({ onOpenModal }) => {
                         ))}
                     </nav>
 
-                    <Button onClick={onOpenModal} variant="primary" className="py-2 px-4 text-sm">
-                        Записаться
-                    </Button>
+                    <a href="tel:+79320990444" className="inline-flex items-center justify-center font-medium transition-all duration-300 transform active:scale-95 px-5 py-2.5 rounded-full bg-brand-purple text-white shadow-lg hover:shadow-xl hover:brightness-110 text-sm">
+                        <Phone size={18} className="mr-2" />
+                        Позвонить
+                    </a>
                 </div>
 
-                <button className="lg:hidden p-2 text-slate-800" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                    {isMenuOpen ? <X /> : <Menu />}
+                <button className="lg:hidden p-2 text-slate-800 relative z-[110]" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                    {isMenuOpen ? <X size={32} /> : <Menu size={32} />}
                 </button>
             </div>
 
-            {isMenuOpen && (
-                <div className="absolute top-full left-0 right-0 bg-white shadow-xl border-t border-slate-100 p-6 flex flex-col space-y-4 lg:hidden animate-fade-in max-h-[80vh] overflow-y-auto">
-                    {navItems.map(item => (
-                        <button key={item.name} onClick={() => scrollTo(item.id)} className="text-left text-lg font-medium text-slate-700 py-2 border-b border-slate-50">
-                            {item.name}
-                        </button>
-                    ))}
-                    <Button onClick={() => { setIsMenuOpen(false); onOpenModal(); }} className="w-full mt-4">
-                        Записаться
-                    </Button>
+            {/* Full Screen Mobile Menu Overlay - Instant Open */}
+            <div className={`fixed inset-0 bg-white z-[100] flex flex-col lg:hidden ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                {/* Top Bar inside menu to maintain logo and close button consistency */}
+                <div className="p-6 flex items-center justify-between border-b border-slate-50">
+                    <div className="flex items-center gap-2">
+                         <img src="/images/logo.png" alt="Logo" className="h-10 w-10 object-contain" />
+                         <span className="font-serif font-bold text-slate-800 text-lg tracking-tight">Олег Тетченко</span>
+                    </div>
                 </div>
-            )}
+
+                <div className="flex-grow flex flex-col items-center justify-center p-8 space-y-8">
+                    <nav className="flex flex-col items-center space-y-6">
+                        {navItems.map((item) => (
+                            <button 
+                                key={item.name} 
+                                onClick={() => scrollTo(item.id)} 
+                                className="text-3xl font-serif font-bold text-slate-800 hover:text-brand-purple transition-all transform active:scale-95"
+                            >
+                                {item.name}
+                            </button>
+                        ))}
+                    </nav>
+                    
+                    <div className="w-16 h-1 bg-slate-100 rounded-full"></div>
+
+                    <a href="tel:+79320990444" className="flex flex-col items-center gap-2 group">
+                        <span className="text-xs uppercase tracking-[0.2em] text-slate-400 font-bold">Записаться на встречу</span>
+                        <span className="text-2xl font-bold text-brand-purple group-active:scale-95 transition-transform">+7 932 099 0444</span>
+                    </a>
+                </div>
+
+                <div className="p-8 border-t border-slate-50 bg-slate-50/50 flex justify-center">
+                    <div className="flex gap-8 text-slate-400">
+                         <span className="text-sm font-medium italic">Олег Тетченко — Телесные практики</span>
+                    </div>
+                </div>
+            </div>
         </header>
     );
 };

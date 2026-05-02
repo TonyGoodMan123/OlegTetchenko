@@ -3,7 +3,6 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import Problems from './components/Problems';
 import Method from './components/Method';
-import Steps from './components/Steps';
 import Doubts from './components/Doubts';
 import Cases from './components/Cases';
 import About from './components/About';
@@ -34,7 +33,6 @@ function App() {
         <Hero onOpenModal={handleOpenModal} />
         <Problems onOpenModal={handleOpenModal} />
         <Method onOpenModal={handleOpenModal} />
-        <Steps onOpenModal={handleOpenModal} />
         <Doubts />
         <Cases onOpenModal={handleOpenModal} />
         <About onOpenModal={handleOpenModal} />

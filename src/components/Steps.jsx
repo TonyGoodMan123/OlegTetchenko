@@ -3,7 +3,7 @@ import Section from './ui/Section';
 import SectionTitle from './ui/SectionTitle';
 import { Users } from './ui/icons';
 
-const Steps = ({ onOpenModal }) => (
+const Steps = () => (
     <Section id="steps" bg="white" className="relative overflow-hidden">
         {/* Decorative Background Blobs */}
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-brand-purple/10 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none"></div>

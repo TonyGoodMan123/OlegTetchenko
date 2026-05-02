@@ -42,7 +42,7 @@ const Modal = ({ isOpen, onClose }) => {
             } else {
                 alert('Ошибка отправки: ' + (result.error || 'Проверьте соединение'));
             }
-        } catch (err) {
+        } catch {
             alert('Произошла ошибка при отправке.');
         } finally {
             setIsSubmitting(false);

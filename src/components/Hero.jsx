@@ -8,7 +8,7 @@ const Hero = ({ onOpenModal }) => (
         <div className="absolute -top-20 -left-20 w-96 h-96 bg-brand-teal/20 rounded-full blur-3xl -z-10"></div>
 
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1">
+            <div className="order-1 md:order-1">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-slate-900 leading-[1.15] mb-6">
                     Верните телу <br />
                     <span className="gradient-text">свободу движения</span>
@@ -34,17 +34,9 @@ const Hero = ({ onOpenModal }) => (
                         </li>
                     ))}
                 </ul>
-
-                <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="flex flex-col">
-                        <Button id="hero-cta-button" onClick={onOpenModal} className="text-lg px-8 py-4 shadow-brand-purple/30">
-                            Получить бесплатную консультацию
-                        </Button>
-                    </div>
-                </div>
             </div>
 
-            <div className="order-1 md:order-2 relative flex justify-center md:block">
+            <div className="order-2 md:order-2 relative flex justify-center md:block">
                 <div className="relative rounded-[3rem] overflow-hidden shadow-2xl bg-slate-200 aspect-[4/5] md:max-w-md md:mx-auto">
                     <img
                         src="/images/hero_photo_purple.jpg"
@@ -69,6 +61,16 @@ const Hero = ({ onOpenModal }) => (
                     </div>
                 </div>
                 <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-brand-purple rounded-full opacity-10 blur-2xl"></div>
+            </div>
+
+            <div className="order-3 md:col-start-1 md:-mt-8">
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex flex-col">
+                        <Button id="hero-cta-button" onClick={onOpenModal} className="text-lg px-8 py-4 shadow-brand-purple/30">
+                            Получить бесплатную консультацию
+                        </Button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

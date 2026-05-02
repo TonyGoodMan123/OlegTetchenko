@@ -19,9 +19,9 @@ const Footer = () => (
 
             <div className="mt-8 pt-4 border-t border-slate-800/50">
                 <a href="https://t.me/ant2424" target="_blank" rel="noopener noreferrer"
-                    className="group inline-flex flex-col items-center justify-center px-8 py-3 rounded-full bg-gradient-to-r from-[#4B3990]/40 to-[#008F85]/40 hover:from-[#4B3990]/60 hover:to-[#008F85]/60 border border-white/5 hover:border-white/10 text-white shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm">
-                    <p className="text-[11px] font-medium opacity-60 text-indigo-100 uppercase tracking-widest leading-tight">Разработка сайтов и приложений</p>
-                    <p className="text-sm font-bold opacity-90 leading-tight mt-0.5">Антон Федотов</p>
+                    className="group inline-flex flex-col items-center justify-center px-6 py-2.5 rounded-xl bg-slate-800/30 hover:bg-slate-800/50 border border-slate-700/50 hover:border-slate-600 transition-all duration-300">
+                    <p className="text-[10px] font-medium opacity-50 text-slate-400 uppercase tracking-widest leading-tight">Разработка сайтов и приложений</p>
+                    <p className="text-xs font-bold text-slate-300 leading-tight mt-0.5">Антон Федотов</p>
                 </a>
             </div>
         </div>

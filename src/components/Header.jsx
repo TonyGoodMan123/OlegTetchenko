@@ -20,11 +20,11 @@ const Header = ({ onOpenModal }) => {
 
     const navItems = [
         { name: 'Запросы', id: 'problems' },
-        { name: 'Тестирование', id: 'method' },
+        { name: 'Методика', id: 'method' },
         { name: 'Направления', id: 'directions' },
         { name: 'Отзывы', id: 'cases' },
         { name: 'Обо мне', id: 'about' },
-        { name: 'Запись', id: 'contacts' },
+        { name: 'Контакты', id: 'contacts' },
     ];
 
     return (
@@ -37,12 +37,8 @@ const Header = ({ onOpenModal }) => {
                     <h1 className="font-serif font-bold text-slate-800 flex items-center gap-2 text-base md:text-2xl">
                         Олег Тетченко
                         <span className="text-slate-400 font-light">|</span>
-                        <span className="font-sans font-medium text-slate-500 text-sm md:text-xl inline-grid h-[1.2em] overflow-hidden">
-                            <span className="animate-slide-up-words">
-                                <span className="block h-[1.2em]">Кинезиолог</span>
-                                <span className="block h-[1.2em]">Специалист по телесным практикам</span>
-                                <span className="block h-[1.2em]">Кинезиолог</span>
-                            </span>
+                        <span className="font-sans font-medium text-slate-500 text-sm md:text-xl">
+                            Специалист по телесным практикам
                         </span>
                     </h1>
                 </div>

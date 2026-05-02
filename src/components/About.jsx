@@ -80,7 +80,7 @@ const About = () => {
                 {/* --- Row 1: About Me (Text Left, Photo Right) --- */}
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                     <div>
-                        <SectionTitle title="Обо мне" subtitle="Олег Тетченко — кинезиолог, специалист по телесным практикам" />
+                        <SectionTitle title="Обо мне" subtitle="Олег Тетченко — специалист по телесным практикам" />
                         <div className="prose text-slate-600 mb-8 leading-relaxed">
                             <p className="mb-4">Здравствуйте!</p>
                             <p className="mb-4">Меня зовут Олег Тетченко.</p>

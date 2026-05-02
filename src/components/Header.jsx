@@ -21,7 +21,7 @@ const Header = ({ onOpenModal }) => {
     const navItems = [
         { name: 'Запросы', id: 'problems' },
         { name: 'Тестирование', id: 'method' },
-        { name: 'Направления', id: 'steps' },
+        { name: 'Направления', id: 'directions' },
         { name: 'Отзывы', id: 'cases' },
         { name: 'Обо мне', id: 'about' },
         { name: 'Запись', id: 'contacts' },

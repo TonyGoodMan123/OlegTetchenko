@@ -80,7 +80,7 @@ const Method = () => (
             ))}
         </div>
 
-        <div className="max-w-5xl mr-auto mb-16">
+        <div className="max-w-5xl mr-auto mb-16" id="directions">
             <div className="bg-slate-50 rounded-[2.5rem] p-8 md:p-12 border border-slate-100">
                 <h3 className="text-2xl font-serif font-bold text-slate-800 mb-2 text-left">Основные направления работы</h3>
                 <p className="text-slate-500 text-left mb-10 max-w-2xl mr-auto">

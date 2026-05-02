@@ -42,13 +42,13 @@ const MobileStickyCTA = ({ onOpenModal }) => {
             <div className="bg-white/90 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] py-4 px-5 safe-area-bottom">
                 <div className="flex items-center justify-between gap-4">
                     <p className="text-xs font-light text-slate-500 leading-tight max-w-[55%]">
-                        Бесплатная консультация по вашей ситуации
+                        Запись на первую встречу
                     </p>
                     <button
                         onClick={onOpenModal}
                         className="py-3 px-6 bg-gradient-to-r from-[#6D4CFF] to-[#00D1C1] text-white text-sm font-bold rounded-full shadow-lg transform active:scale-95 transition-all whitespace-nowrap"
                     >
-                        Оставить заявку
+                        Записаться
                     </button>
                 </div>
             </div>

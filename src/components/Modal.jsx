@@ -67,7 +67,7 @@ const Modal = ({ isOpen, onClose }) => {
                             </svg>
                         </div>
                         <h3 className="text-2xl font-serif font-bold text-slate-800 mb-4">
-                            Заявка отправлена!
+                            Запись принята!
                         </h3>
                         <p className="text-slate-600 mb-8 leading-relaxed">
                             Спасибо, {formData.name}! Я свяжусь с вами по номеру <span className="font-bold">{formData.phone}</span> в ближайшее время для уточнения деталей.
@@ -79,10 +79,10 @@ const Modal = ({ isOpen, onClose }) => {
                 ) : (
                     <>
                         <h3 className="text-2xl md:text-3xl font-serif font-bold text-slate-800 mb-2">
-                            Бесплатная консультация
+                            Запись на первую встречу
                         </h3>
                         <p className="text-slate-500 text-sm mb-6 leading-relaxed">
-                            Оставьте имя и телефон. Я свяжусь с вами, уточню жалобы и честно скажу, могу ли помочь в вашей ситуации.
+                            Оставьте имя и телефон. Я свяжусь с вами, уточню ваш запрос и честно скажу, могу ли помочь в вашей ситуации.
                         </p>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
@@ -138,7 +138,7 @@ const Modal = ({ isOpen, onClose }) => {
                                 variant="primary"
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? 'Отправка...' : 'Отправить заявку'}
+                                {isSubmitting ? 'Отправка...' : 'Записаться'}
                             </Button>
                         </form>
                     </>

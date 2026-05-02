@@ -16,7 +16,7 @@ const Doubts = () => (
             </h3>
             <p className="text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">
                 Это нормально. Иногда проще сначала задать вопрос в сообщении.
-                Напишите мне, коротко опишите жалобы и спросите, подойдёт ли вам мой подход.
+                Напишите мне, коротко опишите свой запрос и спросите, подойдёт ли вам мой подход.
                 <br className="hidden md:block" />
                 <span className="font-medium text-brand-purple block mt-2">Наша переписка — только между вами и мной. Конфиденциальность гарантирована.</span>
             </p>
@@ -28,7 +28,7 @@ const Doubts = () => (
                     variant="outline"
                     className="text-sm"
                     icon={Send}
-                    onClick={() => window.open('http://t.me/kineziolog89', '_blank')}
+                    onClick={() => window.open('https://t.me/kinezio_cente', '_blank')}
                 >
                     Написать в Telegram
                 </Button>

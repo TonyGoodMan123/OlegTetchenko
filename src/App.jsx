@@ -40,7 +40,7 @@ function App() {
       </main>
 
       <MobileStickyCTA onOpenModal={handleOpenModal} />
-      <Footer />
+      <Footer onOpenModal={handleOpenModal} />
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>

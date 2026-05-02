@@ -1,8 +1,13 @@
-import React from 'react';
+import Button from './ui/Button';
 
-const Footer = () => (
+const Footer = ({ onOpenModal }) => (
     <footer className="bg-slate-900 text-slate-400 pt-16 pb-8 px-4 text-center text-sm">
         <div className="max-w-6xl mx-auto border-t border-slate-800 pt-8">
+            <div className="mb-12 flex justify-center">
+                <Button onClick={onOpenModal} className="text-base px-8 py-4 shadow-xl">
+                    Записаться на встречу
+                </Button>
+            </div>
             <div className="max-w-2xl mx-auto mb-10 p-6 rounded-2xl bg-slate-800/50 border border-slate-700/50 text-slate-300 text-xs leading-relaxed">
                 <p className="font-bold text-slate-100 mb-2 uppercase tracking-widest">Важно</p>
                 <p>Практики носят консультативный и восстановительный характер, не являются медицинскими услугами и не заменяют обращение к врачу.</p>

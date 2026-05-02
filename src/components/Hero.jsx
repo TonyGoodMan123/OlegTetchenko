@@ -2,7 +2,7 @@ import React from 'react';
 import { Star, Check } from './ui/icons';
 import Button from './ui/Button';
 
-const Hero = () => (
+const Hero = ({ onOpenModal }) => (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 px-4 md:px-8 overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-purple/20 to-transparent -z-10 rounded-l-[100px]"></div>
         <div className="absolute -top-20 -left-20 w-96 h-96 bg-brand-teal/20 rounded-full blur-3xl -z-10"></div>
@@ -34,7 +34,7 @@ const Hero = () => (
                         <div className="pt-4 hidden md:block">
                             <Button
                                 id="hero-cta-button-desktop"
-                                onClick={() => document.getElementById('contacts')?.scrollIntoView({ behavior: 'smooth' })}
+                                onClick={onOpenModal}
                                 className="text-base px-8 py-4 shadow-brand-purple/20"
                             >
                                 Записаться на встречу
@@ -78,7 +78,7 @@ const Hero = () => (
                 <div className="w-full max-w-[320px] mt-8 md:hidden">
                     <Button
                         id="hero-cta-button-mobile"
-                        onClick={() => document.getElementById('contacts')?.scrollIntoView({ behavior: 'smooth' })}
+                        onClick={onOpenModal}
                         className="w-full text-base py-4 shadow-brand-purple/20"
                     >
                         Записаться на встречу

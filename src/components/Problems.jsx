@@ -107,8 +107,8 @@ const Problems = () => {
                 />
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                     {items.map((item, idx) => (
-                        <Card key={idx} className="relative h-full hover:-translate-y-1 transition-transform flex flex-col items-center bg-slate-50 border border-slate-100 rounded-2xl p-6 pt-12 text-center">
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-brand-purple shadow-md overflow-hidden p-3 border border-slate-100">
+                        <Card key={idx} className="relative h-full hover:-translate-y-1 transition-transform flex flex-col items-start bg-slate-50 border border-slate-100 rounded-2xl p-6 pt-8 text-left">
+                            <div className="absolute top-6 right-6 w-12 h-12 rounded-xl bg-white flex items-center justify-center text-brand-purple shadow-sm overflow-hidden p-2.5 border border-slate-50">
                                 {item.image ? (
                                     <img 
                                         src={item.image} 
@@ -118,11 +118,11 @@ const Problems = () => {
                                         decoding="async"
                                     />
                                 ) : (
-                                    <item.icon size={32} />
+                                    <item.icon size={24} />
                                 )}
                             </div>
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">{item.category}</div>
-                            <h3 className="text-xl font-bold text-slate-800 mb-3">{item.title}</h3>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 pr-12">{item.category}</div>
+                            <h3 className="text-lg font-bold text-slate-800 mb-3 pr-10 leading-tight">{item.title}</h3>
                             <p className="text-slate-600 leading-relaxed text-sm flex-grow">{item.text}</p>
                         </Card>
                     ))}

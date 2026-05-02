@@ -13,7 +13,7 @@ const Contacts = ({ onOpenModal }) => (
                 />
                 
                 <div className="mb-8 p-6 bg-brand-purple/5 rounded-3xl border border-brand-purple/10">
-                    <h4 className="font-bold text-slate-800 mb-2">Запишитесь на первую встречу</h4>
+                    <h4 className="font-bold text-slate-800 mb-2">Запишитесь на встречу</h4>
                     <p className="text-slate-600 text-sm">и начните путь к комфорту уже сейчас</p>
                 </div>
 

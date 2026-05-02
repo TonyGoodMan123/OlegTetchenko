@@ -57,9 +57,7 @@ const Header = ({ onOpenModal }) => {
                     </nav>
 
                     <a href="tel:+79320990444" className="inline-flex items-center justify-center font-medium transition-all duration-300 transform active:scale-95 px-5 py-2.5 rounded-full bg-brand-purple text-white shadow-lg hover:shadow-xl hover:brightness-110 text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
+                        <Phone size={18} className="mr-2" />
                         Позвонить
                     </a>
                 </div>
@@ -100,9 +98,7 @@ const Header = ({ onOpenModal }) => {
                     <a href="tel:+79320990444" className="flex flex-col items-center gap-2 group">
                         <span className="text-xs uppercase tracking-[0.2em] text-slate-400 font-bold">Или позвоните</span>
                         <div className="flex items-center gap-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-purple">
-                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                            </svg>
+                            <Phone size={24} className="text-brand-purple" />
                             <span className="text-2xl font-bold text-brand-purple group-active:scale-95 transition-transform">+7 932 099 0444</span>
                         </div>
                     </a>

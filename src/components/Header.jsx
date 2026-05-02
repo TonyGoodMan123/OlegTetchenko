@@ -19,12 +19,12 @@ const Header = ({ onOpenModal }) => {
     };
 
     const navItems = [
-        { name: 'Симптомы', id: 'problems' },
-        { name: 'Методика', id: 'method' },
-        { name: 'Приём', id: 'steps' },
-        { name: 'Кейсы', id: 'cases' },
+        { name: 'Запросы', id: 'problems' },
+        { name: 'Тестирование', id: 'method' },
+        { name: 'Направления', id: 'steps' },
+        { name: 'Отзывы', id: 'cases' },
         { name: 'Обо мне', id: 'about' },
-        { name: 'Контакты', id: 'contacts' },
+        { name: 'Запись', id: 'contacts' },
     ];
 
     return (
@@ -40,7 +40,7 @@ const Header = ({ onOpenModal }) => {
                         <span className="font-sans font-medium text-slate-500 text-sm md:text-xl inline-grid h-[1.2em] overflow-hidden">
                             <span className="animate-slide-up-words">
                                 <span className="block h-[1.2em]">Кинезиолог</span>
-                                <span className="block h-[1.2em]">Остеопрактик</span>
+                                <span className="block h-[1.2em]">Специалист по телесным практикам</span>
                                 <span className="block h-[1.2em]">Кинезиолог</span>
                             </span>
                         </span>
@@ -57,7 +57,7 @@ const Header = ({ onOpenModal }) => {
                     </nav>
 
                     <Button onClick={onOpenModal} variant="primary" className="py-2 px-4 text-sm">
-                        Бесплатная консультация
+                        Записаться
                     </Button>
                 </div>
 
@@ -74,7 +74,7 @@ const Header = ({ onOpenModal }) => {
                         </button>
                     ))}
                     <Button onClick={() => { setIsMenuOpen(false); onOpenModal(); }} className="w-full mt-4">
-                        Получить консультацию
+                        Записаться
                     </Button>
                 </div>
             )}

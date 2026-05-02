@@ -3,7 +3,7 @@ import Section from './ui/Section';
 import SectionTitle from './ui/SectionTitle';
 import { ShieldCheck, ChevronLeft, ChevronRight } from './ui/icons';
 
-const About = ({ onOpenModal }) => {
+const About = () => {
     // --- Personal Gallery Data & State ---
     // Updated based on user deletion
     const galleryImages = [
@@ -80,14 +80,20 @@ const About = ({ onOpenModal }) => {
                 {/* --- Row 1: About Me (Text Left, Photo Right) --- */}
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                     <div>
-                        <SectionTitle title="Обо мне" subtitle="Олег Тетченко — кинезиолог, остеопрактик, нутрициолог" />
-                        <div className="prose text-slate-600 mb-8">
-                            <p>
-                                Уже более 15 лет работаю с телом людей: сначала в сфере физической подготовки, затем в прикладной кинезиологии и остеопрактике.
+                        <SectionTitle title="Обо мне" subtitle="Олег Тетченко — кинезиолог, специалист по телесным практикам" />
+                        <div className="prose text-slate-600 mb-8 leading-relaxed">
+                            <p className="mb-4">Здравствуйте!</p>
+                            <p className="mb-4">Меня зовут Олег Тетченко.</p>
+                            <p className="mb-4">
+                                Более 7 лет я занимаюсь прикладной кинезиологией и телесными практиками, помогаю людям лучше понимать сигналы своего тела и находить источники напряжения, дискомфорта и ограничений движения.
                             </p>
-                            <p>
-                                Моя задача — помочь вам вернуть подвижность, снизить боль и научиться жить в теле, которое поддерживает, а не мешает.
+                            <p className="mb-4">
+                                Моя работа направлена на улучшение самочувствия, восстановление лёгкости движения и общего комфорта в теле.
                             </p>
+                            <p className="mb-4">
+                                Использую мягкие и бережные методы работы, индивидуально подбирая подход под каждый запрос.
+                            </p>
+                            <p>Работаю как со взрослыми, так и с детьми.</p>
                         </div>
                     </div>
 
@@ -163,10 +169,17 @@ const About = ({ onOpenModal }) => {
                         <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
                             <h4 className="font-bold text-slate-800 mb-6 flex items-center text-xl">
                                 <ShieldCheck className="text-brand-teal mr-3" size={28} />
-                                Образование и навыки
+                                Специализация и навыки
                             </h4>
                             <ul className="space-y-4 text-slate-600">
-                                {["Медицинское и физкультурное образование", "Прикладная кинезиология (углублённые курсы)", "Остеопрактика (5 ступеней)", "Работа с болью в мышцах и суставах, спине и шее, таза и позвоночника", "Мягкие мануальные и миофасциальные техники", "Нутрициология и практические методы похудения"].map((item, i) => (
+                                {[
+                                    "Профильное образование в сфере физической культуры и оздоровления",
+                                    "Прикладная кинезиология (углублённые курсы)",
+                                    "Телесно-ориентированные практики",
+                                    "Работа с напряжением в мышцах, суставах, области таза и позвоночника",
+                                    "Мягкие мануальные и миофасциальные техники",
+                                    "Практические методы оздоровления и коррекции образа жизни"
+                                ].map((item, i) => (
                                     <li key={i} className="flex items-start">
                                         <span className="w-2 h-2 bg-brand-teal rounded-full mt-2 mr-3 flex-shrink-0"></span>
                                         <span className="leading-relaxed">{item}</span>

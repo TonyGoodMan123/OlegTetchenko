@@ -80,28 +80,28 @@ const Method = () => (
             ))}
         </div>
 
-        <div className="max-w-5xl mr-auto mb-0">
+        <div className="max-w-5xl mr-auto mb-16">
             <div className="bg-slate-50 rounded-[2.5rem] p-8 md:p-12 border border-slate-100">
-                <h3 className="text-2xl font-serif font-bold text-slate-800 mb-2 text-left">Направления работы</h3>
+                <h3 className="text-2xl font-serif font-bold text-slate-800 mb-2 text-left">Основные направления работы</h3>
                 <p className="text-slate-500 text-left mb-10 max-w-2xl mr-auto">
-                    Для решения вашей задачи я использую комплексный подход и проверенные практики:
+                    Я использую комплексный подход и проверенные временем практики для восстановления баланса вашего тела:
                 </p>
 
-                <div className="grid md:grid-cols-2 gap-x-12 gap-y-6 mb-10">
+                <div className="grid md:grid-cols-2 gap-x-12 gap-y-8 mb-10">
                     {[
-                        { title: "Прикладная кинезиология", desc: "основа для точного анализа состояния." },
-                        { title: "Телесные практики", desc: "мягкая коррекция баланса тела и подвижности." },
-                        { title: "Висцеральные техники", desc: "работа с мягким снятием внутреннего напряжения." },
-                        { title: "Кинезиотейпирование", desc: "поддержка мышц и комфорта после сеанса." },
-                        { title: "Массажные техники", desc: "(миофасциальный, лимфодренажный) для снятия зажимов." },
-                        { title: "Психоэмоциональный баланс", desc: "работа с последствиями стресса в теле." },
-                        { title: "Основы благополучия", desc: "рекомендации по образу жизни для поддержки тела." }
+                        { title: "Мануально-мышечное тестирование", desc: "Работа с мышечным балансом, движением, осанкой и общим состоянием тела." },
+                        { title: "Работа с телесным напряжением", desc: "Мягкие практики для снижения напряжения в теле и улучшения общего самочувствия." },
+                        { title: "Практики для лёгкости в теле", desc: "Поддержка естественного восстановления, снижение отёчности и ощущения тяжести." },
+                        { title: "Работа с детьми", desc: "Осанка, телесное развитие, адаптация к нагрузкам и поддержка комфортного движения." },
+                        { title: "Восстановление после нагрузок", desc: "Поддержка после спорта, физического напряжения и перенапряжения." },
+                        { title: "Кинезиотейпирование", desc: "Поддержка движения, снижение нагрузки и помощь в комфортном восстановлении после активности." }
                     ].map((method, idx) => (
                         <div key={idx} className="flex items-start">
                             <div className="w-2 h-2 mt-2.5 rounded-full bg-brand-purple flex-shrink-0 mr-4"></div>
-                            <p className="text-slate-700">
-                                <span className="font-bold text-slate-800">{method.title}</span> — {method.desc}
-                            </p>
+                            <div className="text-slate-700">
+                                <p className="font-bold text-slate-800 mb-1">{method.title}</p>
+                                <p className="text-sm leading-relaxed">{method.desc}</p>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -122,7 +122,35 @@ const Method = () => (
                         </p>
                     </div>
                 </div>
+            </div>
+        </div>
 
+        {/* --- New Block: Why Choose Me --- */}
+        <div className="max-w-5xl ml-auto">
+            <div className="bg-white rounded-[2.5rem] p-8 md:p-12 border border-slate-100 shadow-soft">
+                <h3 className="text-2xl font-serif font-bold text-slate-800 mb-8 text-left">Почему выбирают меня</h3>
+
+                <div className="grid md:grid-cols-2 gap-x-12 gap-y-6 mb-10">
+                    {[
+                        "индивидуальный подход к каждому клиенту",
+                        "работа с источниками напряжения в теле",
+                        "мягкие телесные практики без агрессивного воздействия",
+                        "комплексный подход к улучшению самочувствия",
+                        "работа как со взрослыми, так и с детьми",
+                        "практический опыт и реальные результаты клиентов"
+                    ].map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-3 text-slate-700">
+                            <div className="bg-brand-teal/10 text-brand-teal rounded-full p-1 flex-shrink-0">
+                                <ShieldCheck size={18} />
+                            </div>
+                            <span className="font-medium">{item}</span>
+                        </div>
+                    ))}
+                </div>
+
+                <p className="text-xl font-serif font-medium text-slate-800 border-t border-slate-50 pt-8 italic">
+                    Моя задача — помочь телу вернуть естественный баланс и комфорт движения.
+                </p>
             </div>
         </div>
     </Section>

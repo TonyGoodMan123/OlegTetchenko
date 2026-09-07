@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X } from './ui/icons';
 import Button from './ui/Button';
 import { sendTelegramMessage } from '../utils/telegram';
+import { generateLeadId, buildLeadPayload, sendLeadBackup } from '../utils/leadBackup';
 
 const Modal = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({ name: '', phone: '+7 ' });
     const [consent, setConsent] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    // Генерируем lead_id один раз при открытии модала (защита от двойного клика)
+    const leadIdRef = useRef(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -15,6 +18,8 @@ const Modal = ({ isOpen, onClose }) => {
             setIsSuccess(false);
             setFormData({ name: '', phone: '+7 ' });
             setConsent(false);
+            // Новый lead_id для каждого открытия формы
+            leadIdRef.current = generateLeadId();
         }
         else document.body.style.overflow = 'unset';
         return () => { document.body.style.overflow = 'unset'; }
@@ -32,18 +37,67 @@ const Modal = ({ isOpen, onClose }) => {
             return;
         }
 
+        // Защита от двойного клика — уже идёт отправка
+        if (isSubmitting) return;
+
         setIsSubmitting(true);
 
-        try {
-            const result = await sendTelegramMessage(formData);
+        const leadId = leadIdRef.current || generateLeadId();
 
-            if (result.success) {
+        try {
+            // ── Запускаем Telegram и backup ОДНОВРЕМЕННО ────────────────────
+            // Promise.allSettled гарантирует, что оба промиса выполнятся,
+            // даже если один из них упадёт или уйдёт в таймаут.
+            const [telegramResult, backupResult] = await Promise.allSettled([
+                sendTelegramMessage(formData),
+                sendLeadBackup(buildLeadPayload(
+                    formData,
+                    leadId,
+                    'pending' // статус Telegram ещё неизвестен на момент запуска
+                )),
+            ]);
+
+            // Определяем статусы
+            const telegramOk = telegramResult.status === 'fulfilled' && telegramResult.value?.success;
+            const backupOk   = backupResult.status === 'fulfilled'   && backupResult.value?.ok;
+
+            const telegramStatus = telegramOk ? 'sent' : 'failed';
+
+            // Логируем результат для диагностики
+            console.info('[Modal] submit результат:', {
+                lead_id: leadId,
+                telegram: telegramStatus,
+                backup: backupOk ? 'saved' : 'failed',
+                backup_detail: backupResult.status === 'fulfilled' ? backupResult.value : backupResult.reason,
+            });
+
+            // ── Приоритет: если backup подтверждён — считаем успехом ────────
+            // Пользователь видит успех даже если Telegram не доставил.
+            // Если backup тоже упал — показываем ошибку.
+            if (backupOk || telegramOk) {
                 setIsSuccess(true);
+
+                // Отправляем цель в Яндекс.Метрику
+                try {
+                    if (typeof window.ym === 'function') {
+                        window.ym(106065947, 'reachGoal', 'lead_submitted', {
+                            lead_id: leadId,
+                            telegram_ok: telegramOk,
+                            backup_ok: backupOk,
+                        });
+                    }
+                } catch (_) {}
             } else {
-                alert('Ошибка отправки: ' + (result.error || 'Проверьте соединение'));
+                // Оба канала упали — честно сообщаем
+                console.error('[Modal] Оба канала не доступны. backup:', backupResult, 'telegram:', telegramResult);
+                alert('Не удалось отправить заявку. Пожалуйста, позвоните напрямую: +7 (932) 099-04-44');
             }
-        } catch {
-            alert('Произошла ошибка при отправке.');
+
+        } catch (unexpectedErr) {
+            // Этого не должно произойти при правильной реализации sendLeadBackup/sendTelegramMessage,
+            // но на всякий случай ловим
+            console.error('[Modal] Неожиданная ошибка:', unexpectedErr);
+            alert('Произошла ошибка при отправке. Позвоните напрямую: +7 (932) 099-04-44');
         } finally {
             setIsSubmitting(false);
         }
@@ -108,6 +162,20 @@ const Modal = ({ isOpen, onClose }) => {
                                     placeholder="+7 (999) 000-00-00"
                                     value={formData.phone}
                                     onChange={handlePhoneChange}
+                                />
+                            </div>
+
+                            {/* Honeypot — скрытое поле для защиты от ботов. Люди не видят и не заполняют. */}
+                            <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }} aria-hidden="true">
+                                <label htmlFor="website">Оставьте это поле пустым</label>
+                                <input
+                                    id="website"
+                                    name="website"
+                                    type="text"
+                                    tabIndex={-1}
+                                    autoComplete="off"
+                                    value={formData.website || ''}
+                                    onChange={e => setFormData({ ...formData, website: e.target.value })}
                                 />
                             </div>
 

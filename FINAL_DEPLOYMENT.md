@@ -2,8 +2,8 @@
 
 ## ✅ Что уже готово
 
-- ✅ Токен бота получен: `8581878866:AAGG_12TIgc-4wWErr_pFxBEZTCKIJlMVok`
-- ✅ Бот проверен: **OlegSiteBot** (@OlegSiteBot)
+- ⚠️ Токен бота был скомпрометирован и подлежит перевыпуску через @BotFather (/revoke)
+- ✅ Бот: **OlegSiteBot** (@OlegSiteBot)
 - ✅ Код Worker готов к развертыванию
 - ✅ chat_id группы: `-1003496210379`
 
@@ -45,7 +45,7 @@
 4. **ВАЖНО**: Выберите тип **Secret** (не Text!)
 5. Заполните:
    - **Variable name**: `BOT_TOKEN`
-   - **Value**: `8581878866:AAGG_12TIgc-4wWErr_pFxBEZTCKIJlMVok`
+   - **Value**: `ВАШ_НОВЫЙ_ТОКЕН_ОТ_BOTFATHER` (перевыпущенный)
 6. Нажмите **Encrypt**
 7. Нажмите **Save and Deploy**
 

@@ -2,10 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X } from './ui/icons';
 import Button from './ui/Button';
 import { generateLeadId, buildLeadPayload, sendLeadBackup, sendLeadIngest } from '../utils/leadBackup';
-import { formatRussianPhone, normalizeRussianPhone } from '../utils/phone';
+import PhoneInput, { isPossiblePhoneNumber } from 'react-phone-number-input';
+import ru from 'react-phone-number-input/locale/ru';
+import flags from 'react-phone-number-input/flags';
+import 'react-phone-number-input/style.css';
+import './PhoneField.css';
 
 const Modal = ({ isOpen, onClose }) => {
-    const [formData, setFormData] = useState({ name: '', phone: '+7 ' });
+    const [formData, setFormData] = useState({ name: '', phone: '' });
+    const [phoneError, setPhoneError] = useState('');
     const [consent, setConsent] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -16,7 +21,8 @@ const Modal = ({ isOpen, onClose }) => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
             setIsSuccess(false);
-            setFormData({ name: '', phone: '+7 ' });
+            setFormData({ name: '', phone: '' });
+            setPhoneError('');
             setConsent(false);
             // Новый lead_id для каждого открытия формы
             leadIdRef.current = generateLeadId();
@@ -25,8 +31,9 @@ const Modal = ({ isOpen, onClose }) => {
         return () => { document.body.style.overflow = 'unset'; }
     }, [isOpen]);
 
-    const handlePhoneChange = (e) => {
-        setFormData({ ...formData, phone: formatRussianPhone(e.target.value) });
+    const handlePhoneChange = (phone) => {
+        setFormData(previous => ({ ...previous, phone: phone || '' }));
+        setPhoneError('');
     };
 
     const handleSubmit = async (e) => {
@@ -37,9 +44,9 @@ const Modal = ({ isOpen, onClose }) => {
             return;
         }
 
-        const phone = normalizeRussianPhone(formData.phone);
-        if (!phone) {
-            alert('Введите номер в формате +7 (999) 000-00-00.');
+        const phone = formData.phone;
+        if (!phone || !isPossiblePhoneNumber(phone)) {
+            setPhoneError('Проверьте номер телефона и выбранную страну.');
             return;
         }
 
@@ -146,18 +153,23 @@ const Modal = ({ isOpen, onClose }) => {
                             </div>
                             <div>
                                 <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-1">Телефон *</label>
-                                <input
+                                <PhoneInput
                                     id="phone"
                                     required
-                                    type="tel"
-                                    className="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-200 focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/20 outline-none transition"
-                                    placeholder="+7 (999) 000-00-00"
+                                    className="lead-phone"
+                                    defaultCountry="RU"
+                                    international
+                                    withCountryCallingCode
+                                    limitMaxLength
+                                    labels={ru}
+                                    flags={flags}
                                     value={formData.phone}
                                     onChange={handlePhoneChange}
-                                    inputMode="numeric"
-                                    autoComplete="tel-national"
-                                    maxLength={18}
+                                    autoComplete="tel"
+                                    aria-invalid={Boolean(phoneError)}
+                                    aria-describedby={phoneError ? 'phone-error' : undefined}
                                 />
+                                {phoneError && <p id="phone-error" role="alert" className="mt-2 text-sm text-red-600">{phoneError}</p>}
                             </div>
 
                             {/* Honeypot — скрытое поле для защиты от ботов. Люди не видят и не заполняют. */}

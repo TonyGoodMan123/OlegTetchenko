@@ -21,7 +21,7 @@ Required environment variables:
 ```text
 YDB_CONNECTION_STRING=grpcs://ydb.serverless.yandexcloud.net:2135/ru-central1/.../...
 YDB_TABLE_NAME=leads
-MAX_USER_ID=...
+MAX_USER_IDS=... # comma-separated MAX user IDs, for example: 20863108,32464810
 MAX_BOT_TOKEN=... # supplied from Yandex Lockbox, never a plain environment value
 EMAIL_DELIVERY_MODE=google-client # keep while Google Apps Script remains the email sender
 MAIL_TO=Olegt68@mail.ru # required only for SMTP mode
@@ -51,7 +51,7 @@ MAX recipient discovery:
 2. Oleg sends `Тест` to the bot.
 3. Call `GET https://platform-api2.max.ru/updates` with `Authorization:
    <MAX_BOT_TOKEN>` from a secure server-side environment.
-4. Save the resulting user or chat id as `MAX_USER_ID` or `MAX_CHAT_ID`.
+4. Add the resulting user or chat ID to `MAX_USER_IDS` or `MAX_CHAT_IDS`.
 
 Timer retry:
 

@@ -303,34 +303,55 @@ async function attemptMax(lead, simulation) {
   }
 
   const token = process.env.MAX_BOT_TOKEN;
-  const userId = process.env.MAX_USER_ID;
-  const chatId = process.env.MAX_CHAT_ID;
-  const recipientQuery = userId ? `user_id=${encodeURIComponent(userId)}` : `chat_id=${encodeURIComponent(chatId || '')}`;
+  const recipients = maxRecipients();
 
-  if (!token || (!userId && !chatId)) {
+  if (!token || recipients.length === 0) {
     return { status: 'skipped', attemptsDelta: 0, error: 'MAX recipient is not configured' };
   }
 
-  try {
-    const response = await fetch(`${MAX_API_BASE}/messages?${recipientQuery}`, {
-      method: 'POST',
-      headers: {
-        Authorization: token,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        text: buildMaxMessage(lead),
-        format: 'markdown',
-        notify: true,
-      }),
-    });
+  const results = await Promise.all(recipients.map(async (recipient) => {
+    try {
+      const response = await fetch(`${MAX_API_BASE}/messages?${recipient.kind}=${encodeURIComponent(recipient.id)}`, {
+        method: 'POST',
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: buildMaxMessage(lead),
+          format: 'markdown',
+          notify: true,
+        }),
+      });
 
-    const data = await response.json().catch(() => ({}));
-    if (response.ok) return { status: 'sent', attemptsDelta: 1 };
-    return { status: 'failed', attemptsDelta: 1, error: `MAX HTTP ${response.status}: ${safeError(data.message || data.error || data.description)}` };
-  } catch (error) {
-    return { status: 'failed', attemptsDelta: 1, error: `MAX network: ${safeError(error)}` };
+      const data = await response.json().catch(() => ({}));
+      return response.ok
+        ? { ok: true }
+        : { ok: false, error: `MAX HTTP ${response.status}: ${safeError(data.message || data.error || data.description)}` };
+    } catch (error) {
+      return { ok: false, error: `MAX network: ${safeError(error)}` };
+    }
+  }));
+
+  const failed = results.filter((result) => !result.ok);
+  if (failed.length > 0) {
+    return { status: 'failed', attemptsDelta: 1, error: failed.map((result) => result.error).join('; ') };
   }
+
+  return { status: 'sent', attemptsDelta: 1 };
+}
+
+function maxRecipients() {
+  const userIds = splitRecipientIds([process.env.MAX_USER_ID, process.env.MAX_USER_IDS].filter(Boolean).join(','));
+  const chatIds = splitRecipientIds([process.env.MAX_CHAT_ID, process.env.MAX_CHAT_IDS].filter(Boolean).join(','));
+  return [
+    ...userIds.map((id) => ({ kind: 'user_id', id })),
+    ...chatIds.map((id) => ({ kind: 'chat_id', id })),
+  ];
+}
+
+function splitRecipientIds(value) {
+  return [...new Set(String(value || '').split(',').map((id) => id.trim()).filter(Boolean))];
 }
 
 async function attemptMail(lead, simulation, override = {}) {

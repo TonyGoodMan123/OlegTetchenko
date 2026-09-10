@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X } from './ui/icons';
 import Button from './ui/Button';
 import { generateLeadId, buildLeadPayload, sendLeadBackup, sendLeadIngest } from '../utils/leadBackup';
-import PhoneInput, { isPossiblePhoneNumber } from 'react-phone-number-input';
+import PhoneInput, { isPossiblePhoneNumber } from 'react-phone-number-input/core';
+import phoneMetadata from '../utils/phoneMetadata';
 import ru from 'react-phone-number-input/locale/ru';
 import flags from 'react-phone-number-input/flags';
 import 'react-phone-number-input/style.css';
@@ -45,7 +46,7 @@ const Modal = ({ isOpen, onClose }) => {
         }
 
         const phone = formData.phone;
-        if (!phone || !isPossiblePhoneNumber(phone)) {
+        if (!phone || !isPossiblePhoneNumber(phone, phoneMetadata)) {
             setPhoneError('Проверьте номер телефона и выбранную страну.');
             return;
         }
@@ -161,6 +162,7 @@ const Modal = ({ isOpen, onClose }) => {
                                     international
                                     withCountryCallingCode
                                     limitMaxLength
+                                    metadata={phoneMetadata}
                                     labels={ru}
                                     flags={flags}
                                     value={formData.phone}

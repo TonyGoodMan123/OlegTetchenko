@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "test:lead": "node tests/lead_backup_scenarios.cjs",
+    "test:phone": "node tests/phone_mask_scenarios.cjs",
     "deploy": "gh-pages -d dist",
     "lint": "eslint .",
     "preview": "vite preview"

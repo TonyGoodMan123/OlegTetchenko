@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X } from './ui/icons';
 import Button from './ui/Button';
 import { generateLeadId, buildLeadPayload, sendLeadBackup, sendLeadIngest } from '../utils/leadBackup';
+import { formatRussianPhone, normalizeRussianPhone } from '../utils/phone';
 
 const Modal = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({ name: '', phone: '+7 ' });
@@ -25,7 +26,7 @@ const Modal = ({ isOpen, onClose }) => {
     }, [isOpen]);
 
     const handlePhoneChange = (e) => {
-        setFormData({ ...formData, phone: e.target.value });
+        setFormData({ ...formData, phone: formatRussianPhone(e.target.value) });
     };
 
     const handleSubmit = async (e) => {
@@ -33,6 +34,12 @@ const Modal = ({ isOpen, onClose }) => {
 
         if (!consent) {
             alert('Пожалуйста, подтвердите согласие на обработку персональных данных.');
+            return;
+        }
+
+        const phone = normalizeRussianPhone(formData.phone);
+        if (!phone) {
+            alert('Введите номер в формате +7 (999) 000-00-00.');
             return;
         }
 
@@ -44,7 +51,7 @@ const Modal = ({ isOpen, onClose }) => {
         const leadId = leadIdRef.current || generateLeadId();
 
         try {
-            const payload = buildLeadPayload(formData, leadId);
+            const payload = buildLeadPayload({ ...formData, phone }, leadId);
             const [ingestResult, backupResult] = await Promise.all([
                 sendLeadIngest(payload),
                 sendLeadBackup(payload),
@@ -147,6 +154,9 @@ const Modal = ({ isOpen, onClose }) => {
                                     placeholder="+7 (999) 000-00-00"
                                     value={formData.phone}
                                     onChange={handlePhoneChange}
+                                    inputMode="numeric"
+                                    autoComplete="tel-national"
+                                    maxLength={18}
                                 />
                             </div>
 

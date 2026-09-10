@@ -1,0 +1,16 @@
+{
+  "name": "oleg-lead-ingest-function",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "@ydbjs/auth": "^6.3.1",
+    "@ydbjs/core": "^6.3.1",
+    "@ydbjs/query": "^6.3.0",
+    "nodemailer": "^7.0.11"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

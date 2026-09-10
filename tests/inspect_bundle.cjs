@@ -1,18 +1,29 @@
 const fs = require('fs');
+const path = require('path');
 
-const code = fs.readFileSync('dist/assets/index-BnY7uZmO.js', 'utf8');
+const assetsDir = path.join(__dirname, '..', 'dist', 'assets');
+const bundleName = fs.readdirSync(assetsDir).find((name) => /^index-.*\.js$/.test(name));
 
-// Find where kh is defined
-const khMatch = code.match(/kh\s*=\s*([^;,]+)/);
-console.log('kh match:', khMatch ? khMatch[0] : 'not found');
+if (!bundleName) {
+  console.error('Main JS bundle not found');
+  process.exit(1);
+}
 
-// Search for AKfycb anywhere
-const hasUrl = code.includes('AKfycbxTNuLHbaPcoiR86ej3vqiXSj93_P7OfrbHLESvio-R8MqCF34eZwPrTqjblT6g9TwwTA');
-console.log('Includes full Apps Script ID:', hasUrl);
+const code = fs.readFileSync(path.join(assetsDir, bundleName), 'utf8');
 
-// Search for script.google.com
-const hasGoogle = code.includes('script.google.com');
-console.log('Includes script.google.com:', hasGoogle);
+const checks = [
+  ['Includes Yandex Cloud Function URL', code.includes('functions.yandexcloud.net')],
+  ['Includes existing Google Apps Script email URL', code.includes('script.google.com')],
+  ['Does not include MAX platform API', !code.includes('platform-api2.max.ru')],
+  ['Does not include SMTP config names', !code.includes('SMTP_PASS') && !code.includes('SMTP_HOST')],
+  ['Does not include MAX token env name', !code.includes('MAX_BOT_TOKEN')],
+  ['Includes lead_id generation marker', code.includes('lead_')],
+];
 
-// Check if kh is empty string
-console.log('Is kh empty?', code.includes('kh=""'));
+let failed = 0;
+for (const [label, ok] of checks) {
+  console.log(`${label}: ${ok ? 'PASS' : 'FAIL'}`);
+  if (!ok) failed++;
+}
+
+if (failed > 0) process.exit(1);

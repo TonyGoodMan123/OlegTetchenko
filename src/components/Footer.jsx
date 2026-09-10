@@ -1,6 +1,4 @@
-import Button from './ui/Button';
-
-const Footer = ({ onOpenModal }) => (
+const Footer = () => (
     <footer className="bg-slate-900 text-slate-400 pt-16 pb-8 px-4 text-center text-sm">
         <div className="max-w-6xl mx-auto border-t border-slate-800 pt-8">
             <div className="max-w-2xl mx-auto mb-10 p-6 rounded-2xl bg-slate-800/50 border border-slate-700/50 text-slate-300 text-xs leading-relaxed">

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X } from './ui/icons';
 import Button from './ui/Button';
-import { sendTelegramMessage } from '../utils/telegram';
-import { generateLeadId, buildLeadPayload, sendLeadBackup } from '../utils/leadBackup';
+import { generateLeadId, buildLeadPayload, sendLeadBackup, sendLeadIngest } from '../utils/leadBackup';
 
 const Modal = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({ name: '', phone: '+7 ' });
@@ -45,56 +44,42 @@ const Modal = ({ isOpen, onClose }) => {
         const leadId = leadIdRef.current || generateLeadId();
 
         try {
-            // ── Запускаем Telegram и backup ОДНОВРЕМЕННО ────────────────────
-            // Promise.allSettled гарантирует, что оба промиса выполнятся,
-            // даже если один из них упадёт или уйдёт в таймаут.
-            const [telegramResult, backupResult] = await Promise.allSettled([
-                sendTelegramMessage(formData),
-                sendLeadBackup(buildLeadPayload(
-                    formData,
-                    leadId,
-                    'pending' // статус Telegram ещё неизвестен на момент запуска
-                )),
+            const payload = buildLeadPayload(formData, leadId);
+            const [ingestResult, backupResult] = await Promise.all([
+                sendLeadIngest(payload),
+                sendLeadBackup(payload),
             ]);
+            const saved = Boolean(ingestResult.ok && ingestResult.saved);
 
-            // Определяем статусы
-            const telegramOk = telegramResult.status === 'fulfilled' && telegramResult.value?.success;
-            const backupOk   = backupResult.status === 'fulfilled'   && backupResult.value?.ok;
-
-            const telegramStatus = telegramOk ? 'sent' : 'failed';
-
-            // Логируем результат для диагностики
             console.info('[Modal] submit результат:', {
                 lead_id: leadId,
-                telegram: telegramStatus,
-                backup: backupOk ? 'saved' : 'failed',
-                backup_detail: backupResult.status === 'fulfilled' ? backupResult.value : backupResult.reason,
+                saved,
+                max_status: ingestResult.max_status,
+                mail_status: ingestResult.mail_status,
+                google_email: backupResult.ok ? 'sent' : 'failed',
             });
 
-            // ── Приоритет: если backup подтверждён — считаем успехом ────────
-            // Пользователь видит успех даже если Telegram не доставил.
-            // Если backup тоже упал — показываем ошибку.
-            if (backupOk || telegramOk) {
+            if (saved) {
                 setIsSuccess(true);
 
-                // Отправляем цель в Яндекс.Метрику
                 try {
                     if (typeof window.ym === 'function') {
                         window.ym(106065947, 'reachGoal', 'lead_submitted', {
-                            lead_id: leadId,
-                            telegram_ok: telegramOk,
-                            backup_ok: backupOk,
+                            saved: true,
+                            max_status: ingestResult.max_status || 'unknown',
+                            mail_status: ingestResult.mail_status || 'unknown',
                         });
                     }
-                } catch (_) {}
+                } catch {
+                    // Metrika errors must not block the form.
+                }
             } else {
-                // Оба канала упали — честно сообщаем
-                console.error('[Modal] Оба канала не доступны. backup:', backupResult, 'telegram:', telegramResult);
+                console.error('[Modal] Заявка не сохранена:', ingestResult.error || 'unknown');
                 alert('Не удалось отправить заявку. Пожалуйста, позвоните напрямую: +7 (932) 099-04-44');
             }
 
         } catch (unexpectedErr) {
-            // Этого не должно произойти при правильной реализации sendLeadBackup/sendTelegramMessage,
+            // Этого не должно произойти при правильной реализации sendLeadIngest,
             // но на всякий случай ловим
             console.error('[Modal] Неожиданная ошибка:', unexpectedErr);
             alert('Произошла ошибка при отправке. Позвоните напрямую: +7 (932) 099-04-44');

@@ -64,14 +64,20 @@ const Modal = ({ isOpen, onClose }) => {
                 sendLeadIngest(payload),
                 sendLeadBackup(payload),
             ]);
-            const saved = Boolean(ingestResult.ok && ingestResult.saved);
+            // Google Apps Script also persists the lead. A failure in the Yandex
+            // notification path must not hide a successfully received request.
+            const savedInYdb = Boolean(ingestResult.ok && ingestResult.saved);
+            const savedInGoogle = Boolean(backupResult.ok && !backupResult.spam_filtered);
+            const saved = savedInYdb || savedInGoogle;
 
             console.info('[Modal] submit результат:', {
                 lead_id: leadId,
                 saved,
+                saved_in_ydb: savedInYdb,
+                saved_in_google: savedInGoogle,
                 max_status: ingestResult.max_status,
                 mail_status: ingestResult.mail_status,
-                google_email: backupResult.ok ? 'sent' : 'failed',
+                google_email: backupResult.ok ? (backupResult.email_status || 'unknown') : 'failed',
             });
 
             if (saved) {
@@ -81,6 +87,8 @@ const Modal = ({ isOpen, onClose }) => {
                     if (typeof window.ym === 'function') {
                         window.ym(106065947, 'reachGoal', 'lead_submitted', {
                             saved: true,
+                            saved_in_ydb: savedInYdb,
+                            saved_in_google: savedInGoogle,
                             max_status: ingestResult.max_status || 'unknown',
                             mail_status: ingestResult.mail_status || 'unknown',
                         });
@@ -114,17 +122,17 @@ const Modal = ({ isOpen, onClose }) => {
                 </button>
 
                 {isSuccess ? (
-                    <div className="text-center py-8">
-                        <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div role="status" aria-live="polite" className="text-center rounded-[2rem] bg-green-50 border-2 border-green-500 px-5 py-10 sm:px-8 sm:py-12">
+                        <div className="w-24 h-24 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-7 shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-14 w-14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
-                        <h3 className="text-2xl font-serif font-bold text-slate-800 mb-4">
-                            Запись принята!
+                        <h3 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-5">
+                            Ваша заявка принята!
                         </h3>
-                        <p className="text-slate-600 mb-8 leading-relaxed">
-                            Спасибо, {formData.name}! Я свяжусь с вами по номеру <span className="font-bold">{formData.phone}</span> в ближайшее время для уточнения деталей.
+                        <p className="text-lg sm:text-xl text-slate-700 mb-8 leading-relaxed">
+                            Спасибо, {formData.name}! Мы получили вашу заявку. Олег свяжется с вами по номеру <span className="font-bold text-slate-900">{formData.phone}</span> для уточнения деталей.
                         </p>
                         <Button onClick={onClose} className="w-full">
                             Понятно

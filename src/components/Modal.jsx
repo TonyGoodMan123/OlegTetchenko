@@ -19,6 +19,7 @@ const Modal = ({ isOpen, onClose }) => {
     const [submitMessage, setSubmitMessage] = useState('');
     // Генерируем lead_id один раз при открытии модала (защита от двойного клика)
     const leadIdRef = useRef(null);
+    const submittedLeadRef = useRef(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -31,6 +32,7 @@ const Modal = ({ isOpen, onClose }) => {
             setConsent(false);
             // Новый lead_id для каждого открытия формы
             leadIdRef.current = generateLeadId();
+            submittedLeadRef.current = null;
         }
         else document.body.style.overflow = 'unset';
         return () => { document.body.style.overflow = 'unset'; }
@@ -65,8 +67,14 @@ const Modal = ({ isOpen, onClose }) => {
         const leadId = leadIdRef.current || generateLeadId();
 
         try {
-            const payload = buildLeadPayload({ ...formData, phone }, leadId);
-            const result = await submitLeadWithConfirmation(payload);
+            const payload = submittedLeadRef.current || buildLeadPayload({ ...formData, phone }, leadId);
+            submittedLeadRef.current = payload;
+            const result = await submitLeadWithConfirmation(payload, (lateResult) => {
+                if (leadIdRef.current !== leadId) return;
+                console.info('[Modal] Позднее подтверждение сохранения:', { lead_id: leadId, channel: lateResult.channel });
+                setSubmitError('');
+                setIsSuccess(true);
+            });
 
             console.info('[Modal] submit результат:', {
                 lead_id: leadId,
@@ -123,7 +131,7 @@ const Modal = ({ isOpen, onClose }) => {
                             Ваша заявка принята!
                         </h3>
                         <p className="text-lg sm:text-xl text-slate-700 mb-8 leading-relaxed">
-                            Спасибо, {formData.name}! Мы получили вашу заявку. Олег свяжется с вами по номеру <span className="font-bold text-slate-900">{formData.phone}</span> для уточнения деталей.
+                            Спасибо, {submittedLeadRef.current?.name || formData.name}! Мы получили вашу заявку. Олег свяжется с вами по номеру <span className="font-bold text-slate-900">{submittedLeadRef.current?.phone || formData.phone}</span> для уточнения деталей.
                         </p>
                         <Button onClick={onClose} className="w-full">
                             Понятно
@@ -144,6 +152,7 @@ const Modal = ({ isOpen, onClose }) => {
                                 <input
                                     id="name"
                                     required
+                                    disabled={Boolean(submittedLeadRef.current)}
                                     type="text"
                                     className="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-200 focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/20 outline-none transition"
                                     placeholder="Иван"
@@ -156,6 +165,7 @@ const Modal = ({ isOpen, onClose }) => {
                                 <PhoneInput
                                     id="phone"
                                     required
+                                    disabled={Boolean(submittedLeadRef.current)}
                                     className="lead-phone"
                                     defaultCountry="RU"
                                     international
@@ -193,6 +203,7 @@ const Modal = ({ isOpen, onClose }) => {
                                     id="consent"
                                     type="checkbox"
                                     checked={consent}
+                                    disabled={Boolean(submittedLeadRef.current)}
                                     onChange={e => setConsent(e.target.checked)}
                                     className="mt-1 w-5 h-5 rounded border-slate-300 text-brand-purple focus:ring-brand-purple/20 cursor-pointer"
                                     required
@@ -217,7 +228,7 @@ const Modal = ({ isOpen, onClose }) => {
                                 {isSubmitting ? 'Сохраняем…' : submitError ? 'Повторить отправку' : 'Записаться'}
                             </Button>
                             {isSubmitting && <p role="status" aria-live="polite" className="text-center text-sm text-slate-600">{submitMessage}</p>}
-                            {submitError && <p role="alert" className="rounded-xl bg-amber-50 border border-amber-300 p-3 text-sm text-slate-800">{submitError} Если вопрос срочный, позвоните: <a href="tel:+79320990444" className="font-bold underline">+7 (932) 099-04-44</a>.</p>}
+                            {submitError && <p role="alert" className="rounded-xl bg-amber-50 border border-amber-300 p-3 text-sm text-slate-800">{submitError} Для изменения данных откройте форму заново. Если вопрос срочный, позвоните: <a href="tel:+79320990444" className="font-bold underline">+7 (932) 099-04-44</a>.</p>}
                         </form>
                     </>
                 )}

@@ -11,8 +11,9 @@ const LEAD_INGEST_URL = import.meta.env.VITE_YANDEX_FUNCTION_URL
 const BACKUP_URL = import.meta.env.VITE_BACKUP_LEADS_URL || '';
 
 const LEAD_INGEST_TIMEOUT_MS = 10000;
-const BACKUP_TIMEOUT_MS = 25000;
-const STATUS_TIMEOUT_MS = 7000;
+const BACKUP_TIMEOUT_MS = 10000;
+const STATUS_TIMEOUT_MS = 5000;
+const MAX_UI_WAIT_MS = 12000;
 
 export function generateLeadId() {
   const now = new Date();
@@ -146,7 +147,7 @@ export async function checkLeadBackup(leadId) {
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** Resolve as soon as either server confirms persistence. All retries reuse lead_id. */
-export async function submitLeadWithConfirmation(payload) {
+export async function submitLeadWithConfirmation(payload, onLateSuccess) {
   const ingest = sendLeadIngest(payload).then((result) => {
     if (result.ok && result.saved) return { saved: true, channel: 'ydb', result };
     throw new Error(result.error || 'YDB not confirmed');
@@ -175,9 +176,12 @@ export async function submitLeadWithConfirmation(payload) {
     throw new Error('Status not confirmed');
   })();
 
-  try {
-    return await Promise.any([ingest, backup, status]);
-  } catch {
-    return { saved: false, error: 'unconfirmed' };
-  }
+  const confirmation = Promise.any([ingest, backup, status]).catch(() => null);
+  const quickResult = await Promise.race([confirmation, delay(MAX_UI_WAIT_MS).then(() => null)]);
+  if (quickResult) return quickResult;
+  // The browser is free to retry with the same ID while slow requests finish.
+  confirmation.then((lateResult) => {
+    if (lateResult && typeof onLateSuccess === 'function') onLateSuccess(lateResult);
+  });
+  return { saved: false, error: 'unconfirmed' };
 }

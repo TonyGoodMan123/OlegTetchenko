@@ -193,7 +193,7 @@ function testFrontendContract() {
   const modal = fs.readFileSync(path.join(__dirname, '..', 'src', 'components', 'Modal.jsx'), 'utf8');
   const leadClient = fs.readFileSync(path.join(__dirname, '..', 'src', 'utils', 'leadBackup.js'), 'utf8');
 
-  assert('Modal submits through persistence confirmation', modal.includes('submitLeadWithConfirmation(payload)'));
+  assert('Modal submits through persistence confirmation', modal.includes('submitLeadWithConfirmation(payload,'));
   assert('Modal no longer imports Telegram sender', !modal.includes('sendTelegramMessage'));
   assert('Modal success requires saved=true', modal.includes('if (result.saved)'));
   assert('Metrika payload does not include name', !modal.includes('name: formData.name'));
@@ -202,6 +202,8 @@ function testFrontendContract() {
   assert('Client keeps Google Apps Script delivery', leadClient.includes('sendLeadBackup(payload)'));
   assert('Client confirms ambiguous saves by lead_id', leadClient.includes('checkLeadBackup(payload.lead_id)'));
   assert('Client retries with the same payload', (leadClient.match(/sendLeadBackup\(payload\)/g) || []).length >= 2);
+  assert('Client limits the time the button stays busy', leadClient.includes('MAX_UI_WAIT_MS = 12000'));
+  assert('Client handles late confirmation', leadClient.includes('onLateSuccess(lateResult)'));
   assert('Modal does not show native submit failure alert', !modal.includes("alert('Не удалось отправить заявку"));
   assert('Client keeps UTM and yclid', leadClient.includes('utm_source') && leadClient.includes('yclid'));
   assert('Client keeps honeypot', leadClient.includes('website: formData.website'));

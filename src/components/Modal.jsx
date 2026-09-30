@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X } from './ui/icons';
 import Button from './ui/Button';
-import { generateLeadId, buildLeadPayload, sendLeadBackup, sendLeadIngest } from '../utils/leadBackup';
+import { generateLeadId, buildLeadPayload, submitLeadWithConfirmation } from '../utils/leadBackup';
 import PhoneInput, { isPossiblePhoneNumber } from 'react-phone-number-input/core';
 import phoneMetadata from '../utils/phoneMetadata';
 import ru from 'react-phone-number-input/locale/ru';
@@ -15,6 +15,8 @@ const Modal = ({ isOpen, onClose }) => {
     const [consent, setConsent] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState('');
+    const [submitMessage, setSubmitMessage] = useState('');
     // Генерируем lead_id один раз при открытии модала (защита от двойного клика)
     const leadIdRef = useRef(null);
 
@@ -24,6 +26,8 @@ const Modal = ({ isOpen, onClose }) => {
             setIsSuccess(false);
             setFormData({ name: '', phone: '' });
             setPhoneError('');
+            setSubmitError('');
+            setSubmitMessage('');
             setConsent(false);
             // Новый lead_id для каждого открытия формы
             leadIdRef.current = generateLeadId();
@@ -55,59 +59,46 @@ const Modal = ({ isOpen, onClose }) => {
         if (isSubmitting) return;
 
         setIsSubmitting(true);
+        setSubmitError('');
+        setSubmitMessage('Сохраняем заявку…');
 
         const leadId = leadIdRef.current || generateLeadId();
 
         try {
             const payload = buildLeadPayload({ ...formData, phone }, leadId);
-            const [ingestResult, backupResult] = await Promise.all([
-                sendLeadIngest(payload),
-                sendLeadBackup(payload),
-            ]);
-            // Google Apps Script also persists the lead. A failure in the Yandex
-            // notification path must not hide a successfully received request.
-            const savedInYdb = Boolean(ingestResult.ok && ingestResult.saved);
-            const savedInGoogle = Boolean(backupResult.ok && !backupResult.spam_filtered);
-            const saved = savedInYdb || savedInGoogle;
+            const result = await submitLeadWithConfirmation(payload);
 
             console.info('[Modal] submit результат:', {
                 lead_id: leadId,
-                saved,
-                saved_in_ydb: savedInYdb,
-                saved_in_google: savedInGoogle,
-                max_status: ingestResult.max_status,
-                mail_status: ingestResult.mail_status,
-                google_email: backupResult.ok ? (backupResult.email_status || 'unknown') : 'failed',
+                saved: result.saved,
+                channel: result.channel || 'unconfirmed',
             });
 
-            if (saved) {
+            if (result.saved) {
                 setIsSuccess(true);
 
                 try {
                     if (typeof window.ym === 'function') {
                         window.ym(106065947, 'reachGoal', 'lead_submitted', {
                             saved: true,
-                            saved_in_ydb: savedInYdb,
-                            saved_in_google: savedInGoogle,
-                            max_status: ingestResult.max_status || 'unknown',
-                            mail_status: ingestResult.mail_status || 'unknown',
+                            channel: result.channel,
                         });
                     }
                 } catch {
                     // Metrika errors must not block the form.
                 }
             } else {
-                console.error('[Modal] Заявка не сохранена:', ingestResult.error || 'unknown');
-                alert('Не удалось отправить заявку. Пожалуйста, позвоните напрямую: +7 (932) 099-04-44');
+                setSubmitError('Не удалось подтвердить получение заявки. Проверьте связь и нажмите «Повторить». Повтор не создаст вторую запись.');
             }
 
         } catch (unexpectedErr) {
             // Этого не должно произойти при правильной реализации sendLeadIngest,
             // но на всякий случай ловим
             console.error('[Modal] Неожиданная ошибка:', unexpectedErr);
-            alert('Произошла ошибка при отправке. Позвоните напрямую: +7 (932) 099-04-44');
+            setSubmitError('Не удалось подтвердить получение заявки. Проверьте связь и нажмите «Повторить».');
         } finally {
             setIsSubmitting(false);
+            setSubmitMessage('');
         }
     };
 
@@ -223,8 +214,10 @@ const Modal = ({ isOpen, onClose }) => {
                                 variant="primary"
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? 'Отправка...' : 'Записаться'}
+                                {isSubmitting ? 'Сохраняем…' : submitError ? 'Повторить отправку' : 'Записаться'}
                             </Button>
+                            {isSubmitting && <p role="status" aria-live="polite" className="text-center text-sm text-slate-600">{submitMessage}</p>}
+                            {submitError && <p role="alert" className="rounded-xl bg-amber-50 border border-amber-300 p-3 text-sm text-slate-800">{submitError} Если вопрос срочный, позвоните: <a href="tel:+79320990444" className="font-bold underline">+7 (932) 099-04-44</a>.</p>}
                         </form>
                     </>
                 )}

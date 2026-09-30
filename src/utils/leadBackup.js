@@ -10,8 +10,9 @@ const LEAD_INGEST_URL = import.meta.env.VITE_YANDEX_FUNCTION_URL
   || 'https://functions.yandexcloud.net/d4e4cvesch2fiq2hpsts';
 const BACKUP_URL = import.meta.env.VITE_BACKUP_LEADS_URL || '';
 
-const LEAD_INGEST_TIMEOUT_MS = 12000;
-const BACKUP_TIMEOUT_MS = 12000;
+const LEAD_INGEST_TIMEOUT_MS = 10000;
+const BACKUP_TIMEOUT_MS = 25000;
+const STATUS_TIMEOUT_MS = 7000;
 
 export function generateLeadId() {
   const now = new Date();
@@ -70,7 +71,6 @@ export async function sendLeadIngest(payload) {
       signal: controller.signal,
     });
 
-    clearTimeout(timeoutId);
     const data = await response.json().catch(() => ({}));
 
     if (response.ok && data.ok && data.saved) {
@@ -89,13 +89,14 @@ export async function sendLeadIngest(payload) {
       error: data.error || `HTTP ${response.status}`,
     };
   } catch (err) {
-    clearTimeout(timeoutId);
     if (err.name === 'AbortError') {
       console.error('[leadIngest] Timeout after', LEAD_INGEST_TIMEOUT_MS, 'ms');
       return { ok: false, saved: false, error: 'timeout' };
     }
     console.error('[leadIngest] Network error:', err.message);
     return { ok: false, saved: false, error: 'network' };
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 
@@ -113,14 +114,70 @@ export async function sendLeadBackup(payload) {
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(payload),
       signal: controller.signal,
+      keepalive: true,
     });
-    clearTimeout(timeoutId);
-
     const data = await response.json().catch(() => ({}));
     if (response.ok && data.ok) return data;
     return { ok: false, error: data.error || `HTTP ${response.status}` };
   } catch (error) {
-    clearTimeout(timeoutId);
     return { ok: false, error: error.name === 'AbortError' ? 'timeout' : 'network' };
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+export async function checkLeadBackup(leadId) {
+  if (!BACKUP_URL) return { ok: false, saved: false, error: 'Backup URL not configured' };
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), STATUS_TIMEOUT_MS);
+  try {
+    const url = new URL(BACKUP_URL);
+    url.searchParams.set('lead_id', leadId);
+    const response = await fetch(url, { signal: controller.signal });
+    const data = await response.json().catch(() => ({}));
+    return { ok: response.ok && data.ok, saved: Boolean(response.ok && data.ok && data.saved) };
+  } catch (error) {
+    return { ok: false, saved: false, error: error.name === 'AbortError' ? 'timeout' : 'network' };
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** Resolve as soon as either server confirms persistence. All retries reuse lead_id. */
+export async function submitLeadWithConfirmation(payload) {
+  const ingest = sendLeadIngest(payload).then((result) => {
+    if (result.ok && result.saved) return { saved: true, channel: 'ydb', result };
+    throw new Error(result.error || 'YDB not confirmed');
+  });
+
+  const backup = (async () => {
+    const first = await sendLeadBackup(payload);
+    if (first.ok && !first.spam_filtered) return { saved: true, channel: 'google', result: first };
+    const checked = await checkLeadBackup(payload.lead_id);
+    if (checked.saved) return { saved: true, channel: 'google', result: checked };
+    // A network failure may have happened before the first POST reached Google.
+    // The server locks the lookup and insert, so this retry cannot add a second row.
+    const second = await sendLeadBackup(payload);
+    if (second.ok && !second.spam_filtered) return { saved: true, channel: 'google', result: second };
+    const finalCheck = await checkLeadBackup(payload.lead_id);
+    if (finalCheck.saved) return { saved: true, channel: 'google', result: finalCheck };
+    throw new Error(second.error || first.error || 'Google not confirmed');
+  })();
+
+  const status = (async () => {
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      await delay(2000);
+      const checked = await checkLeadBackup(payload.lead_id);
+      if (checked.saved) return { saved: true, channel: 'google', result: checked };
+    }
+    throw new Error('Status not confirmed');
+  })();
+
+  try {
+    return await Promise.any([ingest, backup, status]);
+  } catch {
+    return { saved: false, error: 'unconfirmed' };
   }
 }

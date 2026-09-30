@@ -193,13 +193,16 @@ function testFrontendContract() {
   const modal = fs.readFileSync(path.join(__dirname, '..', 'src', 'components', 'Modal.jsx'), 'utf8');
   const leadClient = fs.readFileSync(path.join(__dirname, '..', 'src', 'utils', 'leadBackup.js'), 'utf8');
 
-  assert('Modal uses sendLeadIngest', modal.includes('sendLeadIngest'));
+  assert('Modal submits through persistence confirmation', modal.includes('submitLeadWithConfirmation(payload)'));
   assert('Modal no longer imports Telegram sender', !modal.includes('sendTelegramMessage'));
-  assert('Modal success requires saved=true', modal.includes('ingestResult.ok && ingestResult.saved'));
+  assert('Modal success requires saved=true', modal.includes('if (result.saved)'));
   assert('Metrika payload does not include name', !modal.includes('name: formData.name'));
   assert('Metrika payload does not include phone', !modal.includes('phone: formData.phone'));
   assert('Client keeps Google Apps Script email configuration', leadClient.includes('VITE_BACKUP_LEADS_URL'));
-  assert('Modal keeps Google Apps Script delivery', modal.includes('sendLeadBackup'));
+  assert('Client keeps Google Apps Script delivery', leadClient.includes('sendLeadBackup(payload)'));
+  assert('Client confirms ambiguous saves by lead_id', leadClient.includes('checkLeadBackup(payload.lead_id)'));
+  assert('Client retries with the same payload', (leadClient.match(/sendLeadBackup\(payload\)/g) || []).length >= 2);
+  assert('Modal does not show native submit failure alert', !modal.includes("alert('Не удалось отправить заявку"));
   assert('Client keeps UTM and yclid', leadClient.includes('utm_source') && leadClient.includes('yclid'));
   assert('Client keeps honeypot', leadClient.includes('website: formData.website'));
 }

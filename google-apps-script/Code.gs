@@ -205,33 +205,36 @@ function doPost(e) {
 
     // ── 4. Защита от дублей по lead_id ──────────────────────────────
     const leadsSheet = getOrCreateSheet(ss, CONFIG.SHEET_NAME_LEADS, DEFAULT_LEADS_COLUMNS);
-    const existingValues = leadsSheet.getDataRange().getValues();
-
-    if (existingValues.length > 1) {
-      const headerRow = existingValues[0];
-      const leadIdCol = headerRow.indexOf('lead_id');
-      if (leadIdCol >= 0) {
-        for (let i = 1; i < existingValues.length; i++) {
-          if (String(existingValues[i][leadIdCol]) === leadId) {
-            writeLog(ss, leadId, 'DUPLICATE_REJECTED', 'SUCCESS', { lead_id: leadId });
-            return jsonResponse({ ok: true, duplicate: true, lead_id: leadId });
-          }
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+    try {
+      // The same lead_id may be retried after a browser timeout. Lock the
+      // lookup and append together so simultaneous retries cannot duplicate it.
+      const actualHeaders = leadsSheet.getRange(1, 1, 1, Math.max(leadsSheet.getLastColumn(), DEFAULT_LEADS_COLUMNS.length)).getValues()[0];
+      const leadIdCol = actualHeaders.indexOf('lead_id');
+      if (leadIdCol < 0) throw new Error('lead_id column is missing');
+      if (actualHeaders.indexOf('created_at') < 0) {
+        actualHeaders.push('created_at');
+        leadsSheet.getRange(1, actualHeaders.length).setValue('created_at');
+      }
+      if (leadsSheet.getLastRow() > 1) {
+        const match = leadsSheet.getRange(2, leadIdCol + 1, leadsSheet.getLastRow() - 1, 1)
+          .createTextFinder(leadId).matchEntireCell(true).findNext();
+        if (match) {
+          writeLog(ss, leadId, 'DUPLICATE_REJECTED', 'SUCCESS', { lead_id: leadId });
+          return jsonResponse({ ok: true, duplicate: true, saved: true, lead_id: leadId });
         }
       }
+
+      const rowToWrite = actualHeaders.map(function(colName) {
+        const key = String(colName).trim();
+        return leadData[key] !== undefined ? leadData[key] : '';
+      });
+      leadsSheet.appendRow(rowToWrite);
+      SpreadsheetApp.flush();
+    } finally {
+      lock.releaseLock();
     }
-
-    // ── 5. Запись строки в лист Leads (сопоставление по колонкам) ───
-    // Считываем фактические заголовки листа
-    const actualHeaders = existingValues[0] && existingValues[0].length > 0
-      ? existingValues[0]
-      : DEFAULT_LEADS_COLUMNS;
-
-    const rowToWrite = actualHeaders.map(function(colName) {
-      const key = String(colName).trim();
-      return leadData[key] !== undefined ? leadData[key] : '';
-    });
-
-    leadsSheet.appendRow(rowToWrite);
     writeLog(ss, leadId, 'LEAD_SAVED', 'SUCCESS', { name: name, phone: phone.slice(0, 5) + '***' });
 
     // ── 6. Отправка Email Олегу (только ПОСЛЕ успешной записи) ──────
@@ -316,6 +319,22 @@ function doPost(e) {
 
 function doGet(e) {
   const ss = getSpreadsheet();
+  const leadId = sanitize(e && e.parameter && e.parameter.lead_id);
+  if (leadId) {
+    if (!/^[A-Za-z0-9_-]{8,128}$/.test(leadId)) {
+      return jsonResponse({ ok: false, saved: false, error: 'Invalid lead_id' });
+    }
+    const leadsSheet = ss.getSheetByName(CONFIG.SHEET_NAME_LEADS);
+    if (!leadsSheet || leadsSheet.getLastRow() < 2) {
+      return jsonResponse({ ok: true, saved: false, lead_id: leadId });
+    }
+    const headers = leadsSheet.getRange(1, 1, 1, leadsSheet.getLastColumn()).getValues()[0];
+    const leadIdCol = headers.indexOf('lead_id');
+    if (leadIdCol < 0) return jsonResponse({ ok: false, saved: false, error: 'lead_id column is missing' });
+    const match = leadsSheet.getRange(2, leadIdCol + 1, leadsSheet.getLastRow() - 1, 1)
+      .createTextFinder(leadId).matchEntireCell(true).findNext();
+    return jsonResponse({ ok: true, saved: Boolean(match), lead_id: leadId });
+  }
   return jsonResponse({
     ok: true,
     service: 'lead-backup',
